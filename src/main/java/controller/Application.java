@@ -32,6 +32,7 @@ public class Application {
 		fetchTools(client);
 		writeToolAnnotationsFile();	// Change to use parameter for path and for string to write
         SpringApplication.run(Application.class, args);
+        
     }
     
     /**
