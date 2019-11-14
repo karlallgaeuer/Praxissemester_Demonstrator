@@ -1,0 +1,16 @@
+{
+  "ontology_path": "./apeInputs/ontology.owl",
+  "toolsTaxonomyRoot": "Operation",
+  "dataTaxonomyRoot": "DataType",
+  "dataSubTaxonomyRoot": ["Data", "Format"],
+  "tool_annotations_path": "./tool_annotations.json",
+  "constraints_pathx": "./constraints.json",
+  "shared_memory": "true",
+  "solutions_path": "./results/sat_solutions.txt",
+  "execution_scripts_folder": "./results/",
+  "number_of_execution_scripts": "0",
+  "solution_graphs_folder": "./results/Figures",
+  "debug_mode": "false",
+  "use_workflow_input": "all",
+  "use_all_generated_data": "one"
+}
