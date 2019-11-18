@@ -54,7 +54,7 @@
 			<version>4.2.2</version>
 		</dependency>
     </dependencies>
-
+    
     <properties>
         <java.version>1.8</java.version>
     </properties>

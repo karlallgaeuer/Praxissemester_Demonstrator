@@ -4,8 +4,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
@@ -15,6 +18,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import model.Ontology;
+import nl.uu.cs.ape.sat.APE;
 import nl.uu.cs.ape.sat.utils.APEUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,25 +26,51 @@ import okhttp3.Response;
 
 @SpringBootApplication
 public class Application {
-
-	public static Ontology ontology = null;
+	public static APE apeInstance;
 	public final static OkHttpClient client = new OkHttpClient();
-	public static JSONObject toolAnnotations;
+	/** List of two String pairs data type label and data type id */
+	public static List<Map<String, String>> allDataTypes = new ArrayList<Map<String, String>>();
+	/** List of two String pairs format type label and format type id */
+	public static List<Map<String, String>> allFormatTypes = new ArrayList<Map<String, String>>();
+	
 	
     public static void main(String[] args) throws Exception {
-		ontology = new Ontology();
-		fetchTools(client);
-		writeToolAnnotationsFile();	// Change to use parameter for path and for string to write
+    	JSONObject toolAnnotations = fetchTools("apeInputs/toolList.json");
+		/** TODO**/
+    	fetchAndWriteOntology("http://edamontology.org/EDAM.owl", "apeInputs/ontology.owl");
+		writeToolAnnotationsFile(toolAnnotations, "apeInputs/toolAnnotations.json");	// Change to use parameter for path and for string to write
+		
+		try {
+			apeInstance = new APE("./apeInputs/apeConfigHardcoded.json");
+			allDataTypes = apeInstance.getTypeElements("Data");
+	    	allFormatTypes = apeInstance.getTypeElements("Format");
+		} catch (JSONException e) {
+			System.err.println("Error in parsing the configuration file.");
+		} 
+		
         SpringApplication.run(Application.class, args);
         
+    }
+    
+    public static void fetchAndWriteOntology(String urlToOntology, String pathToOnto) throws IOException {
+    	try {
+    		/** URL to the ontology **/
+			URL ONTOLOGY_URL = new URL(urlToOntology);
+			/** Ontology gets locally saved in the apeInputs folder **/
+			File ontologyFile = new File(pathToOnto); //temp file
+			FileUtils.copyURLToFile(ONTOLOGY_URL, ontologyFile); // Get ontology and copy to the temp file
+		} catch (MalformedURLException e) {
+			System.err.println("Ontology not provided correctly");
+		}
+    	
     }
     
     /**
      * Writes file with toolAnnotations
      * @throws IOException
      */
-    public static void writeToolAnnotationsFile() throws IOException {
-    	File toolAnnotationsFile = new File("apeInputs/toolAnnotations.txt");
+    public static void writeToolAnnotationsFile(JSONObject toolAnnotations, String pathToTools) throws IOException {
+    	File toolAnnotationsFile = new File(pathToTools);
     	BufferedWriter writer = new BufferedWriter(new FileWriter(toolAnnotationsFile));
         writer.write(toolAnnotations.toString());
         writer.close();
@@ -49,10 +79,11 @@ public class Application {
     /**
      * Send Get request to get tool annotations
      * Saves JSONArray with all the tool annotations (in tool list)
+     * @return 
      */
-    private static void fetchTools(OkHttpClient client) throws Exception {
+    private static JSONObject fetchTools(String pathToTools) throws Exception {
     	JSONArray bioToolAnnotations = new JSONArray();
-    	File toolList = new File("apeInputs/toolList.txt");
+    	File toolList = new File(pathToTools);
 		JSONArray toolListJson = new JSONArray(FileUtils.readFileToString(toolList, "UTF-8"));
 		for(int i = 0; i<toolListJson.length(); i++) {
 			String currTool = toolListJson.getString(i);
@@ -66,10 +97,21 @@ public class Application {
 	            bioToolAnnotations.put(i, responseJson);
 	        }
 		}
-		toolAnnotations =  APEUtils.convertBioTools2Ape(bioToolAnnotations);
+		return  APEUtils.convertBioTools2Ape(bioToolAnnotations);
     }
     
-    
+    public static boolean runApe(JSONObject apeConfig) {
+    	boolean corrExe = true;
+    	
+    	try {
+    		corrExe = apeInstance.runSynthesis(apeConfig);
+		} catch (IOException e) {
+			System.err.println("Error in synthesis execution. Writing to the file system failed.");
+			return false;
+		}
+    	
+    	return corrExe;
+    }
     
     
     

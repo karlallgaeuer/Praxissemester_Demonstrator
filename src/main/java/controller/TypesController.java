@@ -23,7 +23,7 @@ public class TypesController {
 	private JSONObject apeConfig;
 	
 	public TypesController() throws IOException{
-		apeConfigFileHardcoded = new File("apeInputs/apeConfigHardcoded.txt");
+		apeConfigFileHardcoded = new File("apeInputs/apeConfigHardcoded.json");
 		apeConfig = new JSONObject(FileUtils.readFileToString(apeConfigFileHardcoded, "UTF-8"));	// Read the hardcoded config file and use it to make a json objetct
 	}
     /**
@@ -31,11 +31,11 @@ public class TypesController {
      */
     @RequestMapping("/getTypes")	// GET-Rest request
     public Map<String, List<Map<String, String>>> getTypes() {
-    	if (Application.ontology != null) {
+    	if (Application.apeInstance != null) {
     		// Create map, which saves both data types and formats
     		Map<String, List<Map<String, String>>> map = new HashMap<>();
-    	    map.put("dataTypes", Application.ontology.getDataTypes());
-    	    map.put("formatTypes", Application.ontology.getFormatTypes());
+    	    map.put("dataTypes", Application.allDataTypes);
+    	    map.put("formatTypes", Application.allFormatTypes);
     	    return map;
     	}else {
     		System.err.println("Ontology doesn't exist.");
@@ -68,31 +68,9 @@ public class TypesController {
     	}
     	// Send tool annotation array (Application.toolAnnotations) to APE, get results (test method here)
     	//Application.toolAnnotations;
-    	//boolean runSucc = runApe(apeConfig);
+    	boolean runSucc = Application.runApe(apeConfig);
     	
     	
 		return false;
     }
-    
-	private boolean runApe(JSONObject apeConfig) {
-		
-		JSONObject confiObject = null;
-		APE apeFramework = null;
-		try {
-			apeFramework = new APE(confiObject);
-		} catch (JSONException e) {
-			System.err.println("Error in parsing the configuration file.");
-			return false;
-		} 
-		
-		try {
-			apeFramework.runSynthesis();
-		} catch (IOException e) {
-			System.err.println("Error in synthesis execution. Writing to the file system failed.");
-			return false;
-		}
-		
-		return false;
-		
-	}
 }

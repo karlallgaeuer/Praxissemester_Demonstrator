@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.OWLAnnotationProperty;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -26,7 +27,9 @@ public class Ontology {
 	private final URL ONTOLOGY_URL;
 	private final String dataTaxonomyRoot;
 	private final String formatTaxonomyRoot;
+	/** List of two String pairs data type label and data type id */
 	private List<Map<String, String>> allDataTypes;
+	/** List of two String pairs format type label and format type id */
 	private List<Map<String, String>> allFormatTypes;
 	
 	public Ontology() throws IOException {
@@ -135,6 +138,7 @@ public class Ontology {
 			if (reasoner.isSatisfiable(child)) { 		// in case that the child is not node owl:Nothing
 				exploreFormatOntologyRec(reasoner, ontology, child, currClass, rootClass, manager);
 			} else { 	
+				System.out.println(currClass);
 				String label = (currClass.getAnnotations(ontology,factory.getRDFSLabel())).toString();	// make the module a tool in case of not having subModules
 				label = label.substring(label.indexOf("\"")+1, label.lastIndexOf("\""));
 				Map<String, String> labels = new HashMap<String, String>();
@@ -170,7 +174,7 @@ public class Ontology {
 	 * @return <b>ModulesTaxonomy</b> OWL class.
 	 */
 	private OWLClass getFormatClass(Set<OWLClass> subClasses) {
-		OWLClass moduleClass = null;
+		OWLClass moduleClass = null;	
 		for (OWLClass currClass : subClasses) {
 			if (getLabel(currClass).matches(formatTaxonomyRoot)) {
 				moduleClass = currClass;
