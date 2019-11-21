@@ -19,6 +19,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import model.Ontology;
 import nl.uu.cs.ape.sat.APE;
+import nl.uu.cs.ape.sat.core.solutionStructure.SolutionWorkflow;
 import nl.uu.cs.ape.sat.utils.APEUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -32,6 +33,8 @@ public class Application {
 	public static List<Map<String, String>> allDataTypes = new ArrayList<Map<String, String>>();
 	/** List of two String pairs format type label and format type id */
 	public static List<Map<String, String>> allFormatTypes = new ArrayList<Map<String, String>>();
+	/** Result object **/
+	public static List<SolutionWorkflow> results;
 	
 	
     public static void main(String[] args) throws Exception {
@@ -101,19 +104,14 @@ public class Application {
     }
     
     public static boolean runApe(JSONObject apeConfig) {
-    	boolean corrExe = true;
-    	
     	try {
-    		corrExe = apeInstance.runSynthesis(apeConfig);
+    		results = apeInstance.runSynthesis(apeConfig);
+    		return true;
 		} catch (IOException e) {
 			System.err.println("Error in synthesis execution. Writing to the file system failed.");
 			return false;
 		}
-    	
-    	return corrExe;
     }
-    
-    
     
     
     //------------------------------------------------------------------------------

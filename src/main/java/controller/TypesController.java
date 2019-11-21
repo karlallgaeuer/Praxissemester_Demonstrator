@@ -2,6 +2,7 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,11 +11,14 @@ import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONString;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import nl.uu.cs.ape.sat.APE;
+import nl.uu.cs.ape.sat.core.solutionStructure.ModuleNode;
+import nl.uu.cs.ape.sat.core.solutionStructure.SolutionWorkflow;
 
 @RestController
 public class TypesController {
@@ -44,6 +48,31 @@ public class TypesController {
     }
     
     /**
+     * @return APE results
+     */
+    @RequestMapping("/getResults")	// GET-Rest request
+    public static String getResults() {
+    	System.out.println(Application.results.toString());
+    	/** List that contains lists of the tool sequences (1 list per workflow solution) **/
+    	List<List<String>> allWorkflowSolutions = new ArrayList<List<String>>();
+    	for(SolutionWorkflow currWorkflowSol : Application.results) {
+    		List<String> solutionTools = new ArrayList<String>();
+        	for(ModuleNode currTool : currWorkflowSol.getModuleNodes()) {
+        		solutionTools.add(currTool.getDotLabel());
+        	}
+        	allWorkflowSolutions.add(solutionTools);
+    	}
+    	System.out.println(allWorkflowSolutions.get(0).toString());
+    	JSONArray resultsJSON = new JSONArray();
+    	for(int i=0;i<allWorkflowSolutions.size();i++) {
+    		resultsJSON.put(i,allWorkflowSolutions.get(i));
+    	}
+    	System.out.println(resultsJSON.toString());
+    	return resultsJSON.toString();
+    	}
+    
+    
+    /**
      * @param userInput
      * @return APE result
      * @throws Exception 
@@ -66,11 +95,7 @@ public class TypesController {
     	}catch (JSONException e){
     		System.err.println("Json configuration set up wrong");
     	}
-    	// Send tool annotation array (Application.toolAnnotations) to APE, get results (test method here)
-    	//Application.toolAnnotations;
-    	boolean runSucc = Application.runApe(apeConfig);
-    	
-    	
-		return false;
+    	boolean bool = Application.runApe(apeConfig);
+    	return bool;
     }
 }

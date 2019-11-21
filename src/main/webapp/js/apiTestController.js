@@ -10,8 +10,9 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 			$scope.solutionNumber = 100;
 			$scope.minWorkflowLength = 1;
 			$scope.maxWorkflowLength= 20;
-			$scope.testData;
-			$scope.results;
+			//$scope.testData;
+			/** TODO: results als Liste speichern --> appendResultsTable() testen**/
+			$scope.results;	// APE results
 			$scope.dataString = "Data";
 			$scope.formatString = "Format";
 			$scope.getApi = function(selectedTool){	//Pulls api data of the selected tool
@@ -29,7 +30,7 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 			}
 			
 			/**
-			 * Send post request to APE and get the result back
+			 * Send post request to APE
 			 */
 			$scope.runApe = function(toSend){
 				//var data = param(toSend);	// Serialize JSON
@@ -37,10 +38,30 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 				console.log(data);
 				$http.post("http://localhost:8080/run", data)
 	            .then(function(response) {
+	            	$scope.getResults();
+	            	//$scope.appendResultsTable();
 	                console.log(response.data);
 	            }, function(error){
 	            	console.log("Post request failed");
 	            });
+			}
+			
+			/**
+			 * Get results from APE
+			 */
+			$scope.getResults = function(){
+				$http.get("http://localhost:8080/getResults")
+				.then(function(response) {
+					$scope.results = response.data;
+				});	
+			}
+			
+			/** Builds results table on the page **/
+			$scope.appendResultsTable = function(){
+				for(i=0;i<results.length;i++){
+					var appendHere = document.getElementById("results").children[0];
+					appendHere.append($compile("<tr><td>" + $scope.results[i] + "</td><td>graph</td><td>complete tool sequence</td></tr>"));
+				}
 			}
 			
 			/**

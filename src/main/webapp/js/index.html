@@ -43,7 +43,6 @@
 					</tr>
 				</tbody>
 			</table>
-			<p>{{x.label}}</p>
 			
 			<p>Outputs:</p>
 			<button class="button" ng-click="addOutputs()">+</button>
@@ -92,6 +91,20 @@
 		
 		</div>
 		<button class="runButton" ng-click="fetchTypes()">Run</button>
+		
+		<table id="results">
+			<tbody>
+				<tr id="firstRow">
+					<th>Tool sequence</th>
+					<th>Graph</th>
+					<th>Complete tool sequence</th>
+				</tr>
+			    <tr id="test" ng-repeat="result in results">
+					<td>{{result}}</td>
+				</tr>
+			</tbody>
+		</table>
+		
 	</div>
 </body>
 
