@@ -92,15 +92,17 @@
 		</div>
 		<button class="runButton" ng-click="fetchTypes()">Run</button>
 		
-		<table id="results">
+		<table id="results" ng-show="showTable">
 			<tbody>
 				<tr id="firstRow">
 					<th>Tool sequence</th>
 					<th>Graph</th>
 					<th>Complete tool sequence</th>
 				</tr>
-			    <tr id="test" ng-repeat="result in results">
-					<td>{{result}}</td>
+			    <tr ng-repeat="obj in mappedResults">              <!-- durch fullResult cyclen geht nicht --><!--ng-repeat="fullResult in fullResults"-->
+					<td><span ng-repeat="x in obj.results track by $index">|{{x}}|</span></td>
+					<td>placeholder</td>
+					<td>{{obj.fullResults}}</td>
 				</tr>
 			</tbody>
 		</table>

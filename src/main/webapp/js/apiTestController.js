@@ -11,10 +11,26 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 			$scope.minWorkflowLength = 1;
 			$scope.maxWorkflowLength= 20;
 			//$scope.testData;
-			/** TODO: results als Liste speichern --> appendResultsTable() testen**/
 			$scope.results;	// APE results
+			$scope.fullResults; // Full result sequences
+			$scope.mappedResults;
+			
 			$scope.dataString = "Data";
 			$scope.formatString = "Format";
+			/** boolean to check if results table should be shown or not **/
+			$scope.showTable = false;
+			
+			$scope.mapResultArray = function(){
+				var mappedArray = [];
+				for(var i=0;i<$scope.fullResults.length;i++){
+					mappedArray.push({
+						'results':$scope.results[i],
+						'fullResults':$scope.fullResults[i]
+					});
+				}
+				return mappedArray;
+			}
+			
 			$scope.getApi = function(selectedTool){	//Pulls api data of the selected tool
 				$http.get("https://bio.tools/api/biotools:".concat($scope.selectedTool,"?format=json")) 
 				.then(function(response){
@@ -39,7 +55,13 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 				$http.post("http://localhost:8080/run", data)
 	            .then(function(response) {
 	            	$scope.getResults();
+	            	$scope.getFullResults();
+	            	while($scope.results == null){
+	            		
+	            	}
+	            	$scope.mappedResults = $scope.mapResultArray(); // combines results (basic tool name sequences) and fullResults in one array
 	            	//$scope.appendResultsTable();
+	            	$scope.showTable = true;
 	                console.log(response.data);
 	            }, function(error){
 	            	console.log("Post request failed");
@@ -53,6 +75,17 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 				$http.get("http://localhost:8080/getResults")
 				.then(function(response) {
 					$scope.results = response.data;
+				});	
+			}
+			
+			/**
+			 * Get full result sequences from APE
+			 */
+			$scope.getFullResults = function(){
+				$http.get("http://localhost:8080/getFullResults")
+				.then(function(response) {
+					console.log("getFullResults-request-response: " + response.data);
+					$scope.fullResults = response.data;
 				});	
 			}
 			
