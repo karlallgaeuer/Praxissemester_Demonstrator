@@ -10,7 +10,6 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 			$scope.solutionNumber = 100;
 			$scope.minWorkflowLength = 1;
 			$scope.maxWorkflowLength= 20;
-			//$scope.testData;
 			$scope.results;	// APE results
 			$scope.fullResults; // Full result sequences
 			$scope.mappedResults;
@@ -22,7 +21,7 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 			
 			$scope.mapResultArray = function(){
 				var mappedArray = [];
-				for(var i=0;i<$scope.fullResults.length;i++){
+				for(var i=0;i<$scope.results.length;i++){
 					mappedArray.push({
 						'results':$scope.results[i],
 						'fullResults':$scope.fullResults[i]
@@ -34,7 +33,7 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 			$scope.getApi = function(selectedTool){	//Pulls api data of the selected tool
 				$http.get("https://bio.tools/api/biotools:".concat($scope.selectedTool,"?format=json")) 
 				.then(function(response){
-					$scope.api = response.data;
+					$scope.api = response.data;	
 				});
 			}
 			$scope.getTypes = function(){
@@ -51,16 +50,17 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 			$scope.runApe = function(toSend){
 				//var data = param(toSend);	// Serialize JSON
 				var data = JSON.stringify(toSend);
-				console.log(data);
 				$http.post("http://localhost:8080/run", data)
 	            .then(function(response) {
+	            	console.log("-1");
 	            	$scope.getResults();
+	            	console.log("2");
 	            	$scope.getFullResults();
-	            	while($scope.results == null){
-	            		
-	            	}
+	            	console.log("3");
+	            	// First run results is null, 2nd run the first results are used, 3rd run the 2nd results are used etc.
 	            	$scope.mappedResults = $scope.mapResultArray(); // combines results (basic tool name sequences) and fullResults in one array
 	            	//$scope.appendResultsTable();
+	            	console.log("4");
 	            	$scope.showTable = true;
 	                console.log(response.data);
 	            }, function(error){
@@ -72,8 +72,11 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 			 * Get results from APE
 			 */
 			$scope.getResults = function(){
+				console.log("0");
 				$http.get("http://localhost:8080/getResults")
 				.then(function(response) {
+					console.log("getResults-request-response: " + response.data);
+					 console.log("1");
 					$scope.results = response.data;
 				});	
 			}
@@ -84,14 +87,13 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 			$scope.getFullResults = function(){
 				$http.get("http://localhost:8080/getFullResults")
 				.then(function(response) {
-					console.log("getFullResults-request-response: " + response.data);
 					$scope.fullResults = response.data;
 				});	
 			}
 			
 			/** Builds results table on the page **/
 			$scope.appendResultsTable = function(){
-				for(i=0;i<results.length;i++){
+				for(i=0;i<$scope.results.length;i++){
 					var appendHere = document.getElementById("results").children[0];
 					appendHere.append($compile("<tr><td>" + $scope.results[i] + "</td><td>graph</td><td>complete tool sequence</td></tr>"));
 				}
@@ -198,6 +200,6 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 				toSend.solution_max_length = $scope.maxWorkflowLength;
 				toSend.max_solutions = $scope.solutionNumber;
 				$scope.testData = toSend;
-				$scope.testData = $scope.runApe(toSend);
+				$scope.runApe(toSend);
 			}
 		});

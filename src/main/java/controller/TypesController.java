@@ -58,6 +58,7 @@ public class TypesController {
 	 */
 	@RequestMapping("/getResults") // GET-Rest request
 	public static String getResults() {
+		System.out.println("dxgxdgdx");
 		System.out.println(Application.results.toString());
 		/**
 		 * List that contains lists of the tool sequences (1 list per workflow solution)
@@ -122,6 +123,8 @@ public class TypesController {
 		} catch (JSONException e) {
 			System.err.println("Json configuration set up wrong");
 		}
+		/** TODO: delete this **/
+		System.out.println(apeConfig.toString());
 		boolean bool = Application.runApe(apeConfig);
 		return bool;
 	}
