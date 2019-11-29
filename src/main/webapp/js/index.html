@@ -99,7 +99,7 @@
 					<th>Graph</th>
 					<th>Complete tool sequence</th>
 				</tr>
-			    <tr ng-repeat="obj in mappedResults">              <!-- durch fullResult cyclen geht nicht --><!--ng-repeat="fullResult in fullResults"-->
+			    <tr ng-repeat="obj in mappedResults">
 					<td><span ng-repeat="x in obj.results track by $index">|{{x}}|</span></td>
 					<td>placeholder</td>
 					<td>{{obj.fullResults}}</td>

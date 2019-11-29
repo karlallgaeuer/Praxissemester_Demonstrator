@@ -12,7 +12,7 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 			$scope.maxWorkflowLength= 20;
 			$scope.results;	// APE results
 			$scope.fullResults; // Full result sequences
-			$scope.mappedResults;
+			$scope.mappedResults;	// Includes results and "full results" in one array (so that looping with one ng-repeat is possible)
 			
 			$scope.dataString = "Data";
 			$scope.formatString = "Format";
@@ -52,19 +52,12 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 				var data = JSON.stringify(toSend);
 				$http.post("http://localhost:8080/run", data)
 	            .then(function(response) {
-	            	console.log("-1");
 	            	$scope.getResults();
-	            	console.log("2");
-	            	$scope.getFullResults();
-	            	console.log("3");
 	            	// First run results is null, 2nd run the first results are used, 3rd run the 2nd results are used etc.
-	            	$scope.mappedResults = $scope.mapResultArray(); // combines results (basic tool name sequences) and fullResults in one array
-	            	//$scope.appendResultsTable();
-	            	console.log("4");
 	            	$scope.showTable = true;
 	                console.log(response.data);
 	            }, function(error){
-	            	console.log("Post request failed");
+	            	console.log("Post request failed"); 
 	            });
 			}
 			
@@ -72,31 +65,15 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 			 * Get results from APE
 			 */
 			$scope.getResults = function(){
-				console.log("0");
 				$http.get("http://localhost:8080/getResults")
 				.then(function(response) {
-					console.log("getResults-request-response: " + response.data);
-					 console.log("1");
 					$scope.results = response.data;
+					$http.get("http://localhost:8080/getFullResults")	// Get request for the more detailed results
+					.then(function(response) {
+						$scope.fullResults = response.data;
+						$scope.mappedResults = $scope.mapResultArray();	// See variable initialisation comment
+					});	
 				});	
-			}
-			
-			/**
-			 * Get full result sequences from APE
-			 */
-			$scope.getFullResults = function(){
-				$http.get("http://localhost:8080/getFullResults")
-				.then(function(response) {
-					$scope.fullResults = response.data;
-				});	
-			}
-			
-			/** Builds results table on the page **/
-			$scope.appendResultsTable = function(){
-				for(i=0;i<$scope.results.length;i++){
-					var appendHere = document.getElementById("results").children[0];
-					appendHere.append($compile("<tr><td>" + $scope.results[i] + "</td><td>graph</td><td>complete tool sequence</td></tr>"));
-				}
 			}
 			
 			/**
