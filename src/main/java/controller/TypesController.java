@@ -1,14 +1,20 @@
 package controller;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.FileUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,7 +64,6 @@ public class TypesController {
 	 */
 	@RequestMapping("/getResults") // GET-Rest request
 	public static String getResults() {
-		System.out.println("dxgxdgdx");
 		System.out.println(Application.results.toString());
 		/**
 		 * List that contains lists of the tool sequences (1 list per workflow solution)
@@ -94,10 +99,34 @@ public class TypesController {
 		return resultSequencesJSON.toString();
 	}
 
-	/** TODO **/
+	/** TODO  
+	 * @throws IOException **/
 	@RequestMapping("/getPictures") // GET-Rest request
-	public static String getPictures() {
-		return "to implement";
+	public static String getPictures() throws IOException {
+        BufferedImage image = null;
+	    JSONArray jsonImage = new JSONArray();
+	    int i = 0;
+        for(SolutionWorkflow currWorkflowSol : Application.results) {
+        	File file = new File("results/Figures/SolutionNo_0_length_1.png");
+	        try {
+				image = ImageIO.read(file);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        try {
+				ImageIO.write(image, "png", baos);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        byte[] imageInBytes = baos.toByteArray();
+	        String encodedImage = new String(Base64.encodeBase64(imageInBytes), "UTF-8");
+	       jsonImage.put(i, encodedImage);
+	       i++;
+        }
+        return jsonImage.toString();
 	}
 
 	/**

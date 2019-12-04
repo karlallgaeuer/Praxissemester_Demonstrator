@@ -100,8 +100,8 @@
 					<th>Complete tool sequence</th>
 				</tr>
 			    <tr ng-repeat="obj in mappedResults">
-					<td><span ng-repeat="x in obj.results track by $index">|{{x}}|</span></td>
-					<td>placeholder</td>
+					<td><span ng-repeat="x in obj.results track by $index">{{x}}<font ng-show="!$last">, </font></span></td>
+					<td><a href="data:image/png;base64,{{obj.resultImages}}" target="_blank"><img ng-src="data:image/png;base64,{{obj.resultImages}}" width="200" height="200"></a></td>
 					<td>{{obj.fullResults}}</td>
 				</tr>
 			</tbody>

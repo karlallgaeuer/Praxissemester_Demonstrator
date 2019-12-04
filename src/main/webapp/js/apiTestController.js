@@ -13,18 +13,20 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 			$scope.results;	// APE results
 			$scope.fullResults; // Full result sequences
 			$scope.mappedResults;	// Includes results and "full results" in one array (so that looping with one ng-repeat is possible)
+			$scope.resultImages;	// Array of the result-images
 			
 			$scope.dataString = "Data";
 			$scope.formatString = "Format";
 			/** boolean to check if results table should be shown or not **/
 			$scope.showTable = false;
-			
+
 			$scope.mapResultArray = function(){
 				var mappedArray = [];
 				for(var i=0;i<$scope.results.length;i++){
 					mappedArray.push({
 						'results':$scope.results[i],
-						'fullResults':$scope.fullResults[i]
+						'fullResults':$scope.fullResults[i],
+						'resultImages':$scope.resultImages[i]
 					});
 				}
 				return mappedArray;
@@ -71,9 +73,13 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 					$http.get("http://localhost:8080/getFullResults")	// Get request for the more detailed results
 					.then(function(response) {
 						$scope.fullResults = response.data;
-						$scope.mappedResults = $scope.mapResultArray();	// See variable initialisation comment
+						$http.get("http://localhost:8080/getPictures")
+						.then(function(response) {
+							$scope.resultImages = response.data;
+							$scope.mappedResults = $scope.mapResultArray();	// See variable initialisation comment
+						});	
 					});	
-				});	
+				});
 			}
 			
 			/**
