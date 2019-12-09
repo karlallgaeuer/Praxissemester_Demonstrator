@@ -34,8 +34,6 @@ public class Application {
 	public static List<Map<String, String>> allDataTypes = new ArrayList<Map<String, String>>();
 	/** List of two String pairs format type label and format type id */
 	public static List<Map<String, String>> allFormatTypes = new ArrayList<Map<String, String>>();
-	/** Result object */
-	public static SATsolutionsList results;
 	
 	public static void main(String[] args) throws Exception {
     	/** Fetch tool annotations */
@@ -106,14 +104,5 @@ public class Application {
 		return  APEUtils.convertBioTools2Ape(bioToolAnnotations);
     }
     
-    public static boolean runApe(JSONObject apeConfig) {
-    	try {
-    		results = apeInstance.runSynthesis(apeConfig);
-    		return true;
-		} catch (IOException e) {
-			System.err.println("Error in synthesis execution. Writing to the file system failed.");
-			return false;
-		}
-    }
 }
   

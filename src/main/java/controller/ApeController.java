@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import model.Utils;
 import nl.uu.cs.ape.sat.constraints.ConstraintTemplate;
+import nl.uu.cs.ape.sat.core.implSAT.SATsolutionsList;
 import nl.uu.cs.ape.sat.core.solutionStructure.ModuleNode;
 
 @RestController
@@ -26,6 +27,9 @@ public class ApeController {
 	private File apeConfigFileHardcoded;
 	/** APE-config, that is to be completed with user inputs */
 	private JSONObject apeConfig;
+	/** Result object **/
+	public static SATsolutionsList results;
+
 
 	public ApeController() throws IOException {
 		apeConfigFileHardcoded = new File("apeInputs/apeConfigHardcoded.json");
@@ -85,7 +89,7 @@ public class ApeController {
 		BufferedImage image = null;
 		JSONArray jsonImage = new JSONArray();
 		
-		Application.results.getStream().forEach(solution -> {
+		results.getStream().forEach(solution -> {
 			BufferedImage controlFlow = solution.getControlflowGraph().getPNGImage();
 			
 			String encodedImage = null;
@@ -112,7 +116,7 @@ public class ApeController {
 		BufferedImage image = null;
 		JSONArray jsonImage = new JSONArray();
 		
-		Application.results.getStream().forEach(solution -> {
+		results.getStream().forEach(solution -> {
 			BufferedImage controlFlow = solution.getControlflowGraph().getPNGImage();
 			
 			String encodedImage = null;
@@ -161,12 +165,19 @@ public class ApeController {
 	 */
 	@RequestMapping(value = "/run")
 	public boolean run(@RequestBody String userInput) {
+		boolean bool;
 		try {
 			Utils.writeApeConfig(userInput, apeConfig);
 		} catch (JSONException e) {
 			System.err.println("Json configuration set up wrong");
 		}
-		boolean bool = Application.runApe(apeConfig);
+		try {
+		results = Application.apeInstance.runSynthesis(apeConfig);
+		bool = true;
+		} catch(IOException e){
+			System.err.println("Error in synthesis execution. Writing to the file system failed.");
+			bool = false;
+		}
 		return bool;
 	}
 }
