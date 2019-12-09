@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
 <head>
-	<title>API Test</title>
+	<title>bio.tools APE - Demo</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.js"></script>	<!--AngularJS-->
 	<script src="UIController.js"></script>	<!--Controller file-->
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">	<!-- Google font "Open Sans" -->
@@ -9,15 +9,32 @@
 	<!--<script src="apiTest.js"></script>-->
 </head>
 
+<style type="text/css">
+	body { background: #F5F5F5 !important; } /* Adding !important forces the browser to overwrite the default style applied by Bootstrap */
+</style>
+
 <body>
 	
 	<div ng-app="UI" ng-controller ="UIController">	<!--View-->
-		<h1>bio.tools APE</h1>
+
+		<div id="options">
+			<h1>bio.tools APE - Demo</h1>
+			<p>Welcome! The bio.tools APE Demonstrator invites you to try out automated workflow
+			composition based on <a href="https://bio.tools/">bio.tools</a>, <a href="http://edamontology.org/page">EDAM</a>
+			and APE! You can test any of the four use cases described in the
+			Bioinformatics paper on <a href="https://doi.org/10.1093/bioinformatics/bty646">Automated workflow Composition in Mass Spectrometry Based Proteomics<a>, 
+			or create your own requests. </p>
+			<p><button class="button">Use Case 1</button>
+			<button class="button">Use Case 2</button>
+			<button class="button">Use Case 3</button>
+			<button class="button">Use Case 4</button></p>
+		</div>
+		
 		<div id="options">
 			<div ng-init="getTypes(); getConstraintDescriptions();"></div>	<!-- Get data types from the backend -->
 			
-			
-			<p>Inputs:</p>
+			<h2>Inputs</h2>
+			<p>Specify the input data (type and format) of the workflow. Fields that you leave emtpy will simply be ignored.</p>
 			<button class="button" ng-click="addInputs()">+</button>
 			<table>
 				<tbody id="inputs">
@@ -44,7 +61,9 @@
 				</tbody>
 			</table>
 			
-			<p>Outputs:</p>
+			<h2>Outputs</h2>
+			<p>Specify the descired output data (type and format) of the workflow. Fields that you leave emtpy will simply be ignored.</p>
+
 			<button class="button" ng-click="addOutputs()">+</button>
 			<table>
 				<tbody id="outputs">
@@ -71,7 +90,10 @@
 				</tbody>
 			</table>
 		  
-			<p>Constraints:</p>
+			<h2>Constraints</h2>
+			<p>Specify any additional properties that you want the workflow to fulfill. Select
+			a constraint template first, then fill it with type, format or operation terms.</p>
+			
 			<table>
 				<tbody id="constraints">
 					<tr id="testID">
@@ -86,7 +108,8 @@
 				</tbody>
 			</table>
 			
-			<p>Options:</p>
+			<h2>Options</h2>
+			<p>Here you can configure the basic parameters of the workflow composition algorithm.</p>
 			<table>
 				<tbody id="config">
 					<tr id="configSection">	<!-- One input with a format type and a data type-->
