@@ -59,12 +59,12 @@ public class ApeController {
 	 */
 	@RequestMapping("/getSimpleResults")
 	public static String getSimpleResults() {
-		System.out.println(Application.results.toString());
+		System.out.println(results.toString());
 		/**
 		 * List that contains lists of the tool sequences (1 list per workflow solution)
 		 **/
 		List<List<String>> allWorkflowSolutions = new ArrayList<List<String>>();
-		Application.results.getStream().forEach(solution -> {
+		results.getStream().forEach(solution -> {
 			List<String> solutionTools = new ArrayList<String>();
 			for (ModuleNode currTool : solution.getModuleNodes()) {
 				solutionTools.add(currTool.getUsedModule().getPredicateLabel());
