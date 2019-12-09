@@ -58,7 +58,7 @@ app.config( [
 			$scope.getConstraintDescriptions = function(){
 				$http.get("http://localhost:8080/getConstraintDescriptions")
 				.then(function(response) {
-					$scope.constraints = response.data.dataTypes; // CHange this to data.constraints
+					$scope.constraints = response.data; // CHange this to data.constraints
 				});	
 			}
 			
@@ -119,6 +119,26 @@ app.config( [
 			/**
 			 * Add another output dropdown box-pair (data type and data format)
 			 */
+			$scope.constraintRows = [];
+			$scope.addConstraint = function(){
+				// Copy the parent div
+				 $scope.constraintRows.push('Row ' + 1);
+				
+				// var copy = angular.copy(toCopy);
+				
+		        // //Change the ids of the copied parent-div, the copied data type dropdwon box and the copied data format dropdown box
+		        // copy.id = copy.id.substring(0,copy.id.length-1) + $scope.counterOutputs;
+		        // copy.children[0].id = copy.children[0].id.substring(0,copy.children[0].id.length-1) + $scope.counterOutputs;
+		        // copy.children[1].id = copy.children[1].id.substring(0,copy.children[1].id.length-1) + $scope.counterOutputs;
+		        // $scope.counterOutputs++;
+		  
+		        // // Insert new row into the outputs table body
+		        // angular.element(document.getElementById("outputs")).append(copy);
+			}
+
+			/**
+			 * Add another output dropdown box-pair (data type and data format)
+			 */
 			$scope.addOutputs = function(){
 				// Copy the parent div
 				var toCopy = document.getElementById("outputSection0");
@@ -133,6 +153,7 @@ app.config( [
 		        // Insert new row into the outputs table body
 		        angular.element(document.getElementById("outputs")).append(copy);
 			}
+			
 			
 			/**
 			 *  Gets the data from the type dropdown boxes and saves it

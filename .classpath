@@ -23,6 +23,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/APE-0.9.1.jar"/>
+	<classpathentry kind="lib" path="lib/APE-0.9.1.jar" sourcepath="lib/APE-0.9.1-sources.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
