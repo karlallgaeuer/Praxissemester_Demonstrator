@@ -48,7 +48,7 @@ app.config( [
 				});
 			}
 			$scope.getTypes = function(){
-				$http.get("http://localhost:8080/getTypes")
+				$http.get("http://localhost:8090/getTypes")
 				.then(function(response) {
 					$scope.dataTypes = response.data.dataTypes;
 					$scope.formatTypes = response.data.formatTypes;
@@ -57,7 +57,7 @@ app.config( [
 			}
 			
 			$scope.getConstraintDescriptions = function(){
-				$http.get("http://localhost:8080/getConstraintDescriptions")
+				$http.get("http://localhost:8090/getConstraintDescriptions")
 				.then(function(response) {
 					$scope.constraints = response.data; // CHange this to data.constraints
 				});	
@@ -69,7 +69,7 @@ app.config( [
 			$scope.runApe = function(toSend){
 				//var data = param(toSend);	// Serialize JSON
 				var data = JSON.stringify(toSend);
-				$http.post("http://localhost:8080/run", data)
+				$http.post("http://localhost:8090/run", data)
 	            .then(function(response) {
 	            	$scope.getResults();
 	            	// First run results is null, 2nd run the first results are used, 3rd run the 2nd results are used etc.
@@ -84,13 +84,13 @@ app.config( [
 			 * Get results from APE
 			 */
 			$scope.getResults = function(){
-				$http.get("http://localhost:8080/getResults")
+				$http.get("http://localhost:8090/getResults")
 				.then(function(response) {
 					$scope.results = response.data;
-					$http.get("http://localhost:8080/getDataFlowImg")	// Get request for the more detailed results
+					$http.get("http://localhost:8090/getDataFlowImg")	// Get request for the more detailed results
 					.then(function(response) {
 						$scope.dataflowImages = response.data;
-						$http.get("http://localhost:8080/getControlFlowImg")
+						$http.get("http://localhost:8090/getControlFlowImg")
 						.then(function(response) {
 							$scope.controlFlowImages = response.data;
 							$scope.mappedResults = $scope.mapResultArray();	// See variable initialisation comment
