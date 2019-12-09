@@ -94,17 +94,19 @@
 			<p>Specify any additional properties that you want the workflow to fulfill. Select
 			a constraint template first, then fill it with type, format or operation terms.</p>
 			
+			<button class="button" ng-click="addConstraint()">+</button>
 			<table>
 				<tbody id="constraints">
 					<tr id="testID">
-						<td id="constraintsSection0">
+						<td id="constraintsSection">
 							<select ng-model=selectedConstraint ng-options="x.value as x.label for x in constraints">
 								<option value="" label=""></option>
 							</select>
 						</td>
-						<td><button class="button" ng-click="addConstraint()">+</button></td>
 					</tr>
-					<tr ng-repeat="rowContent in constraintRows"></tr>
+					<tr ng-repeat="rowContent in constraintRows">
+						<td>{{rowContent}}</td>
+					</tr>
 				</tbody>
 			</table>
 			

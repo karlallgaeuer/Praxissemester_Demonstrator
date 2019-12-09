@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<head>
+	<title>API Test</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.js"></script>	<!--AngularJS-->
+	<script src="apiTestController.js"></script>	<!--Controller file-->
+  	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">	<!-- Google font "Open Sans" -->
+	<link rel="stylesheet" type="text/css" href="..\css\stylesheet.css">	<!-- Css file -->
+	<!--<script src="apiTest.js"></script>-->
+</head>
+
+<body>
+	
+	<div ng-app="apiTest" ng-controller ="apiTestController">	<!--View-->
+		<h1>bio.tools APE</h1>
+		<div id="options">
+			<div ng-init="getTypes(); getConstraintDescriptions();"></div>	<!-- Get data types from the backend -->
+			
+			
+			<p>Inputs:</p>
+			<button class="button" ng-click="addInputs()">+</button>
+			<table>
+				<tbody id="inputs">
+					<tr>
+						<th>
+							Data type:
+						</th>
+						<th>
+							Data format:
+						</th>
+					</tr>
+					<tr id="inputSection0">
+						<td id="dataMenuInputs0">
+							<select ng-model=dropdownModelNameDataInput ng-options="x as x.label for x in dataTypes">
+								<option></option>
+							</select>	<!--Dropdown list with data types -->
+						</td>
+						<td id="formatMenuInputs0">
+							<select ng-model=dropdownModelNameFormatInput ng-options="x.value as x.label for x in formatTypes">	<!--Dropdown list with format types -->
+								<option></option>
+							</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			
+			<p>Outputs:</p>
+			<button class="button" ng-click="addOutputs()">+</button>
+			<table>
+				<tbody id="outputs">
+					<tr>
+						<th>
+							Data type:
+						</th>
+						<th>
+							Data format:
+						</th>
+					</tr>
+					<tr id="outputSection0">	<!-- One input with a format type and a data type-->
+						<td id="dataMenuOutputs0">
+							<select ng-model=dropdownModelNameDataOutput ng-options="x.value as x.label for x in dataTypes">	<!--Dropdown list with data types -->
+								<option value="" label=""></option>
+							</select>
+						</td>
+						<td id="formatMenuOutputs0">
+							<select ng-model=dropdownModelNameFormatOutput ng-options="x.value as x.label for x in formatTypes">	<!--Dropdown list with format types -->
+								<option value="" label=""></option>
+							</select>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		  
+			<p>Constraints:</p>
+			<table>
+				<tbody id="constraints">
+					<tr id="testID">
+						<td id="constraintsSection0">
+							<select ng-model=selectedConstraint ng-options="x.value as x.label for x in constraints">
+								<option value="" label=""></option>
+							</select>
+						</td>
+						<td><button class="button" ng-click="addConstraint()">+</button></td>
+					</tr>
+					<tr ng-repeat="rowContent in constraintRows"></tr>
+				</tbody>
+			</table>
+			
+			<p>Options:</p>
+			<table>
+				<tbody id="config">
+					<tr id="configSection">	<!-- One input with a format type and a data type-->
+						<td>
+							Number of solutions: <input ng-model=solutionNumber type="number" required style="display: inline">
+						</td>
+						<td>
+							Min workflow length: <input ng-model=minWorkflowLength type="number" required style="display: inline">
+						</td>
+						<td>
+							Max workflow length: <input ng-model=maxWorkflowLength type="number" required style="display: inline">
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		
+		</div>
+		<button class="runButton" ng-click="fetchTypes()">Run</button>
+		
+		<table id="results" ng-show="showTable">
+			<tbody>
+				<tr id="firstRow">
+					<th>Tool sequence</th>
+					<th>Graph</th>
+					<th>Complete tool sequence</th>
+				</tr>
+			    <tr ng-repeat="obj in mappedResults">
+					<td><span ng-repeat="x in obj.results track by $index">{{x}}<font ng-show="!$last">, </font></span></td>
+					<td><a href="data:image/png;base64,{{obj.controlFlowImages}}" target="_blank"><img src="data:image/png;base64,{{obj.controlFlowImages}}" width="200" height="200"></a></td>
+					<td><a href="data:image/png;base64,{{obj.dataFlowImages}}" target="_blank"><img src="data:image/png;base64,{{obj.dataFlowImages}}" width="200" height="200"></a></td>
+				</tr>
+			</tbody>
+		</table>
+		
+	</div>
+</body>
+
+</html>

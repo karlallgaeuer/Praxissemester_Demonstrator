@@ -26,23 +26,27 @@ import okhttp3.Response;
 
 @SpringBootApplication
 public class Application {
+	/** APE instance */
 	public static APE apeInstance;
+	/** Http-Client */
 	public final static OkHttpClient client = new OkHttpClient();
 	/** List of two String pairs data type label and data type id */
 	public static List<Map<String, String>> allDataTypes = new ArrayList<Map<String, String>>();
 	/** List of two String pairs format type label and format type id */
 	public static List<Map<String, String>> allFormatTypes = new ArrayList<Map<String, String>>();
-	/** Result object **/
+	/** Result object */
 	public static SATsolutionsList results;
 	
-	
-    public static void main(String[] args) throws Exception {
+	public static void main(String[] args) throws Exception {
+    	/** Fetch tool annotations */
     	JSONObject toolAnnotations = fetchTools("apeInputs/toolList.json");
-		/** TODO**/
+    	/** Fetch ontology */
     	fetchAndWriteOntology("http://edamontology.org/EDAM.owl", "apeInputs/ontology.owl");
-		writeToolAnnotationsFile(toolAnnotations, "apeInputs/toolAnnotations.json");	// Change to use parameter for path and for string to write
+    	/** Write tool annotations in the inputs folder */
+		writeToolAnnotationsFile(toolAnnotations, "apeInputs/toolAnnotations.json");	
 		
 		try {
+			/** Create APE instance */
 			apeInstance = new APE("./apeInputs/apeConfigHardcoded.json");
 			allDataTypes = apeInstance.getTypeElements("Data");
 	    	allFormatTypes = apeInstance.getTypeElements("Format");
@@ -83,7 +87,7 @@ public class Application {
      * Saves JSONArray with all the tool annotations (in tool list)
      * @return 
      */
-    private static JSONObject fetchTools(String pathToTools) throws Exception {
+    public static JSONObject fetchTools(String pathToTools) throws Exception {
     	JSONArray bioToolAnnotations = new JSONArray();
     	File toolList = new File(pathToTools);
 		JSONArray toolListJson = new JSONArray(FileUtils.readFileToString(toolList, "UTF-8"));
@@ -111,131 +115,5 @@ public class Application {
 			return false;
 		}
     }
-    
-    
-    //------------------------------------------------------------------------------
-    /**
-     * TODO: 
-     * @param bioToolsAnotation
-     * @return
-     */
-	public static JSONObject convertBioTools2Ape(JSONArray bioToolsAnotation) {
-			
-			JSONArray apeToolsAnnotations = new JSONArray();
-			
-			for (int i = 0; i < bioToolsAnotation.length(); i++) {
-				JSONObject apeJsonTool = new JSONObject();
-				JSONObject bioJsonTool = bioToolsAnotation.getJSONObject(i);
-				
-				apeJsonTool.put("name", bioJsonTool.getString("name"));
-				apeJsonTool.put("operation", bioJsonTool.getString("biotoolsID"));
-				
-				JSONArray apeTaxonomyTerms = new JSONArray();
-				JSONObject function = bioJsonTool.getJSONArray("function").getJSONObject(0);
-				
-				
-				JSONArray operations = function.getJSONArray("operation");
-				for (int j = 0; j < operations.length(); j++) {
-					JSONObject bioOperation = operations.getJSONObject(j);
-					apeTaxonomyTerms.put(bioOperation.get("term"));
-				}
-				apeJsonTool.put("taxonomyTerms", apeTaxonomyTerms);
-	//			reading inputs
-				JSONArray apeInputs = new JSONArray();
-				JSONArray bioInputs = function.getJSONArray("input");
-	//			for each input
-				for (int j = 0; j < bioInputs.length(); j++) {
-					JSONObject bioInput = bioInputs.getJSONObject(j);
-					JSONObject apeInput = new JSONObject();
-					JSONArray apeInputTypes = new JSONArray();
-					JSONArray apeInputFormats = new JSONArray();
-	//				add all data types
-					for(JSONObject bioType : getListFromJson(bioInput, "data", JSONObject.class)) {
-						apeInputTypes.put(bioType.getString("term"));
-					}
-					apeInput.put("Data", apeInputTypes);
-	//				add all data formats
-					for(JSONObject bioType : getListFromJson(bioInput, "format", JSONObject.class)) {
-						apeInputFormats.put(bioType.getString("term"));
-					}
-					apeInput.put("Format", apeInputFormats);
-					
-					apeInputs.put(apeInput);
-				}
-				apeJsonTool.put("inputs", apeInputs);
-				
-	//			reading inputs
-				JSONArray apeOutputs = new JSONArray();
-				JSONArray bioOutputs = function.getJSONArray("output");
-	//			for each output
-				for (int j = 0; j < bioOutputs.length(); j++) {
-					JSONObject bioOutput = bioOutputs.getJSONObject(j);
-					JSONObject apeOutput = new JSONObject();
-					JSONArray apeOutputTypes = new JSONArray();
-					JSONArray apeOutputFormats = new JSONArray();
-	//				add all data types
-					for(JSONObject bioType : getListFromJson(bioOutput, "data", JSONObject.class)) {
-						apeOutputTypes.put(bioType.getString("term"));
-					}
-					apeOutput.put("Data", apeOutputTypes);
-	//				add all data formats
-					for(JSONObject bioType : getListFromJson(bioOutput, "format", JSONObject.class)) {
-						apeOutputFormats.put(bioType.getString("term"));
-					}
-					apeOutput.put("Format", apeOutputFormats);
-					
-					apeOutputs.put(apeOutput);
-				}
-				apeJsonTool.put("outputs", apeOutputs);
-				
-				
-				
-				apeToolsAnnotations.put(apeJsonTool);
-			}
-			
-			
-			return new JSONObject().put("functions", apeToolsAnnotations);
-		}
-
-	/**
-	 * The method return a list of {@code <T>} elements that correspond to a
-	 * given key in the given json object. If the key corresponds to a
-	 * {@link JSONArray} all the elements are put in a {@link List}, otherwise if
-	 * the key corresponds to a {@code <T>} list will contain only that
-	 * object.
-	 * 
-	 * @param jsonObject - Json object that is being explored
-	 * @param key        - key label that corresponds to the elements
-	 * @param clazz      - class to which the elements should belong to
-	 * @return List of elements that corresponds to the key. If the key does not
-	 *         exists returns empty list.
-	 */
-	public static <T> List<T> getListFromJson(JSONObject jsonObject, String key, Class<T> clazz) {
-		List<T> jsonList = new ArrayList<T>();
-		try {
-			Object tmp = jsonObject.get(key);
-			try {
-				if (tmp instanceof JSONArray) {
-					JSONArray elements = (JSONArray) tmp;
-					for (int i = 0; i < elements.length(); i++) {
-						@SuppressWarnings("unchecked")
-						T element = (T) elements.get(i);
-						jsonList.add(element);
-					}
-				} else {
-					@SuppressWarnings("unchecked")
-					T element = (T) tmp;
-					jsonList.add(element);
-				}
-			} catch (JSONException e) {
-				System.err.println("Json parsing error. Expected object '" + clazz.getSimpleName() + "' under the tag '"
-						+ key + "'. The followig object does not match the provided format:\n" + jsonObject.toString());
-				return jsonList;
-			}
-			return jsonList;
-		} catch (JSONException e) {
-			return jsonList;
-		}
-
-	}
 }
+  
