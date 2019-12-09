@@ -23,7 +23,10 @@ public class TestClass {
 	public void dummyMethod() {
 		TestClass tester = new TestClass();
 		
-		/** Test of the "Utils" class */
+		/**
+		 * Test of the "Utils" class
+		 */
+		/** Testing Utils.getByteArrayFromImg() */
 		BufferedImage testImg = null;
 		try {
 			testImg = TestClassUtils.readImageFromFile("src/test/resources/testImage.png");
@@ -37,7 +40,11 @@ public class TestClass {
 			assertTrue(false);
 		}	
 		
-		/**  */
+		/**
+		 * Test of the "Application" class
+		 */
+		/** Testing Application.fetchTools() */
+		
 	}
 
 }

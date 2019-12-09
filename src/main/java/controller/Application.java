@@ -37,7 +37,6 @@ public class Application {
 	/** Result object */
 	public static SATsolutionsList results;
 	
-	
 	public static void main(String[] args) throws Exception {
     	/** Fetch tool annotations */
     	JSONObject toolAnnotations = fetchTools("apeInputs/toolList.json");
@@ -88,7 +87,7 @@ public class Application {
      * Saves JSONArray with all the tool annotations (in tool list)
      * @return 
      */
-    private static JSONObject fetchTools(String pathToTools) throws Exception {
+    public static JSONObject fetchTools(String pathToTools) throws Exception {
     	JSONArray bioToolAnnotations = new JSONArray();
     	File toolList = new File(pathToTools);
 		JSONArray toolListJson = new JSONArray(FileUtils.readFileToString(toolList, "UTF-8"));
