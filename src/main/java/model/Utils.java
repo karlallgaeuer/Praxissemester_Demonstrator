@@ -16,7 +16,6 @@ public class Utils {
 		baos.flush();
 		byte[] controlFlowBit = baos.toByteArray();
 		baos.close();
-
 		String encodedImg = new String(Base64.encodeBase64(controlFlowBit), "UTF-8");
 		return encodedImg;
 	}

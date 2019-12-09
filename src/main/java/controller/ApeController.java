@@ -21,13 +21,13 @@ import nl.uu.cs.ape.sat.constraints.ConstraintTemplate;
 import nl.uu.cs.ape.sat.core.solutionStructure.ModuleNode;
 
 @RestController
-public class TypesController {
+public class ApeController {
 	/** Hardcoded APE-config as file */
 	private File apeConfigFileHardcoded;
 	/** APE-config, that is to be completed with user inputs */
 	private JSONObject apeConfig;
 
-	public TypesController() throws IOException {
+	public ApeController() throws IOException {
 		apeConfigFileHardcoded = new File("apeInputs/apeConfigHardcoded.json");
 		/** Read the hardcoded config file and use it to make a Json-objetct **/
 		apeConfig = new JSONObject(FileUtils.readFileToString(apeConfigFileHardcoded, "UTF-8")); 
