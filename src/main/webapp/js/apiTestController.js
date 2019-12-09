@@ -1,4 +1,13 @@
 var app = angular.module('apiTest', []);	//Creation of the Module
+app.config( [
+    '$compileProvider',
+    function( $compileProvider )
+    {   
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
+        $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|content|blob|chrome-extension)|data:image\/|\/?img\//);
+    }
+]);
+
 		app.controller('apiTestController', function($scope, $http) {	//Controller
 			$scope.tools;	//Tool list
 			$scope.selectedInputs = new Array('Sequence feature source');	//Currently selected tool
@@ -11,10 +20,10 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 			$scope.minWorkflowLength = 1;
 			$scope.maxWorkflowLength= 20;
 			$scope.results;	// APE results
-			$scope.fullResults; // Full result sequences
+			$scope.dataFlowImages; 
 			$scope.mappedResults;	// Includes results and "full results" in one array (so that looping with one ng-repeat is possible)
-			$scope.resultImages;	// Array of the result-images
-			
+			$scope.controlFlowImages;	// Array of the result-images
+			$scope.constraints;
 			$scope.dataString = "Data";
 			$scope.formatString = "Format";
 			/** boolean to check if results table should be shown or not **/
@@ -31,7 +40,6 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 				}
 				return mappedArray;
 			}
-			
 			$scope.getApi = function(selectedTool){	//Pulls api data of the selected tool
 				$http.get("https://bio.tools/api/biotools:".concat($scope.selectedTool,"?format=json")) 
 				.then(function(response){
@@ -43,6 +51,14 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 				.then(function(response) {
 					$scope.dataTypes = response.data.dataTypes;
 					$scope.formatTypes = response.data.formatTypes;
+					console.log(response.data);
+				});	
+			}
+			
+			$scope.getConstraintDescriptions = function(){
+				$http.get("http://localhost:8080/getConstraintDescriptions")
+				.then(function(response) {
+					$scope.constraints = response.data.dataTypes; // CHange this to data.constraints
 				});	
 			}
 			
@@ -70,12 +86,12 @@ var app = angular.module('apiTest', []);	//Creation of the Module
 				$http.get("http://localhost:8080/getResults")
 				.then(function(response) {
 					$scope.results = response.data;
-					$http.get("http://localhost:8080/getFullResults")	// Get request for the more detailed results
+					$http.get("http://localhost:8080/getDataFlowImg")	// Get request for the more detailed results
 					.then(function(response) {
-						$scope.fullResults = response.data;
-						$http.get("http://localhost:8080/getPictures")
+						$scope.dataflowImages = response.data;
+						$http.get("http://localhost:8080/getControlFlowImg")
 						.then(function(response) {
-							$scope.resultImages = response.data;
+							$scope.controlFlowImages = response.data;
 							$scope.mappedResults = $scope.mapResultArray();	// See variable initialisation comment
 						});	
 					});	

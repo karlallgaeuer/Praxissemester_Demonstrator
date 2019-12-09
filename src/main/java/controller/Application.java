@@ -17,9 +17,8 @@ import org.json.JSONObject;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import model.Ontology;
 import nl.uu.cs.ape.sat.APE;
-import nl.uu.cs.ape.sat.core.solutionStructure.SolutionWorkflow;
+import nl.uu.cs.ape.sat.core.implSAT.SATsolutionsList;
 import nl.uu.cs.ape.sat.utils.APEUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -34,7 +33,7 @@ public class Application {
 	/** List of two String pairs format type label and format type id */
 	public static List<Map<String, String>> allFormatTypes = new ArrayList<Map<String, String>>();
 	/** Result object **/
-	public static List<SolutionWorkflow> results;
+	public static SATsolutionsList results;
 	
 	
     public static void main(String[] args) throws Exception {
@@ -219,10 +218,12 @@ public class Application {
 				if (tmp instanceof JSONArray) {
 					JSONArray elements = (JSONArray) tmp;
 					for (int i = 0; i < elements.length(); i++) {
+						@SuppressWarnings("unchecked")
 						T element = (T) elements.get(i);
 						jsonList.add(element);
 					}
 				} else {
+					@SuppressWarnings("unchecked")
 					T element = (T) tmp;
 					jsonList.add(element);
 				}
