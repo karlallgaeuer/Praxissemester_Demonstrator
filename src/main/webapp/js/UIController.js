@@ -14,11 +14,12 @@ app.config( [
 			$scope.api;	//Api GET data is saved here
 			$scope.dataTypes; // Data types
 			$scope.formatTypes;	// Format types
+			$scope.constraintRows = [];; // Constraints introduced
 			$scope.counterInputs = 1;	// Counter for input dropboxes
 			$scope.counterOutputs = 1;	// Counter for output dropboxes
-			$scope.solutionNumber = 100;
+			$scope.solutionNumber = 10;
 			$scope.minWorkflowLength = 1;
-			$scope.maxWorkflowLength= 20;
+			$scope.maxWorkflowLength= 5;
 			$scope.results;	// APE results
 			$scope.dataFlowImages; 
 			$scope.mappedResults;	// Includes results and "full results" in one array (so that looping with one ng-repeat is possible)
@@ -119,21 +120,14 @@ app.config( [
 			/**
 			 * Add another output dropdown box-pair (data type and data format)
 			 */
-			$scope.constraintRows = [];
+			$scope.constraintRows 
+			$scope.counter = 1;
 			$scope.addConstraint = function(){
 				// Copy the parent div
-				 $scope.constraintRows.push('Row ' + 1);
+				 var constraintDropdown = document.getElementById("constraintsSection").children[0];
+				 $scope.constraintRows.push('Row ' + $scope.counter +  constraintDropdown.options[constraintDropdown.selectedIndex].text) ;
+				 $scope.counter ++;
 				
-				// var copy = angular.copy(toCopy);
-				
-		        // //Change the ids of the copied parent-div, the copied data type dropdwon box and the copied data format dropdown box
-		        // copy.id = copy.id.substring(0,copy.id.length-1) + $scope.counterOutputs;
-		        // copy.children[0].id = copy.children[0].id.substring(0,copy.children[0].id.length-1) + $scope.counterOutputs;
-		        // copy.children[1].id = copy.children[1].id.substring(0,copy.children[1].id.length-1) + $scope.counterOutputs;
-		        // $scope.counterOutputs++;
-		  
-		        // // Insert new row into the outputs table body
-		        // angular.element(document.getElementById("outputs")).append(copy);
 			}
 
 			/**
