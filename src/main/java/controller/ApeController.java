@@ -43,6 +43,7 @@ public class ApeController {
 			Map<String, List<Map<String, String>>> map = new HashMap<>();
 			map.put("dataTypes", Application.allDataTypes);
 			map.put("formatTypes", Application.allFormatTypes);
+			map.put("tools", Application.allTools);
 			return map;
 		} else {
 			System.err.println("Ontology doesn't exist.");
@@ -141,7 +142,7 @@ public class ApeController {
 			Collection<ConstraintTemplate> constrTemplates = Application.apeInstance.getConstraintTemplates();
 			for(ConstraintTemplate currTempl : constrTemplates) {
 				Map<String, String> map = new HashMap<>();
-				map.put("value", currTempl.getConstraintID());
+				map.put("value", currTempl.toJSON().toString());
 				map.put("label", currTempl.getDescription());
 				list.add(map);
 			}

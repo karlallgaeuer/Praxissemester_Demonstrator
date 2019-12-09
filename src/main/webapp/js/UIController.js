@@ -14,6 +14,10 @@ app.config( [
 			$scope.api;	//Api GET data is saved here
 			$scope.dataTypes; // Data types
 			$scope.formatTypes;	// Format types
+			$scope.tools; // Tools
+			$scope.typeOptions //select element containing types
+			$scope.formatOptions //select element containing formats
+			$scope.toolOptions //select element containing tools
 			$scope.constraintRows = [];; // Constraints introduced
 			$scope.counterInputs = 1;	// Counter for input dropboxes
 			$scope.counterOutputs = 1;	// Counter for output dropboxes
@@ -52,6 +56,7 @@ app.config( [
 				.then(function(response) {
 					$scope.dataTypes = response.data.dataTypes;
 					$scope.formatTypes = response.data.formatTypes;
+					$scope.tools = response.data.tools;
 					console.log(response.data);
 				});	
 			}
@@ -147,7 +152,91 @@ app.config( [
 		        // Insert new row into the outputs table body
 		        angular.element(document.getElementById("outputs")).append(copy);
 			}
+
+			function getTypeOptions() {
+                    var typeOptions = document.createElement('select');
+					for(i = 0; i < $scope.dataTypes.length; i++){
+						var newOption = document.createElement("option");
+						newOption.text = $scope.dataTypes[i].label;
+						newOption.value = $scope.dataTypes[i].value;
+						typeOptions.appendChild(newOption);
+					}  
+					return typeOptions;
+			}
+
+			function getFormatOptions() {
+                    var formatOptions = document.createElement('select');
+					for(i = 0; i < $scope.formatTypes.length; i++){
+						var newOption = document.createElement("option");
+						newOption.text = $scope.formatTypes[i].label;
+						newOption.value = $scope.formatTypes[i].value;
+						formatOptions.appendChild(newOption);
+					}  
+					return formatOptions;
+			}
+
+			function getToolOptions() {
+                    var toolOptions = document.createElement('select');
+					for(i = 0; i < $scope.tools.length; i++){
+						var newOption = document.createElement("option");
+						newOption.text = $scope.tools[i].label;
+						newOption.value = $scope.tools[i].value;
+						toolOptions.appendChild(newOption);
+					}  
+					return toolOptions;
+			}
 			
+			/**
+			 * Add a row for each constraint that's specified
+			 */
+			$scope.constraintRows 
+			$scope.counter = 1;
+			$scope.addConstraint = function(){
+
+				    if($scope.typeOptions == null){
+						$scope.typeOptions = getTypeOptions();
+					}
+					if($scope.formatOptions == null){
+						$scope.formatOptions = getFormatOptions();
+					}
+					if($scope.toolsOptions == null){
+						$scope.toolsOptions = getToolOptions();
+					}
+                    
+
+				
+				var constraintDropdown = document.getElementById("constraintsSection").children[0];
+				var selectedConstraint =  JSON.parse(constraintDropdown.value.replace("string:",""));
+				var paramSize = selectedConstraint.parameters.length;
+				var description = selectedConstraint.description
+				
+				for(i =1; i<=paramSize; i++){
+					description = description.replace("${parameter_" + i + "}", "$");
+				}
+				var templateParts = description.split("$");
+
+				var tableBody = document.getElementById("constraints");
+				var row = document.createElement('tr');
+				tableBody.appendChild(row);
+				var cell = document.createElement('td');
+				row.appendChild(cell);
+
+				for(i = 0; i<paramSize; i++){
+					cell.append(templateParts[i]);
+					 if(selectedConstraint.parameters[i].length == 1){
+						
+						var copy = angular.copy($scope.toolsOptions);
+						cell.append(copy); 
+					 } else {
+						var copy1 = angular.copy($scope.typeOptions);
+						cell.append(copy1); 
+						var copy2 = angular.copy($scope.formatOptions);
+						cell.append(copy2); 
+					 }
+				}
+				cell.append(templateParts[paramSize]);
+				
+			}
 			
 			/**
 			 *  Gets the data from the type dropdown boxes and saves it
