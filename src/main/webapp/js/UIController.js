@@ -1,4 +1,4 @@
-var app = angular.module('apiTest', []);	//Creation of the Module
+var app = angular.module('UI', []);	//Creation of the Module
 app.config( [
     '$compileProvider',
     function( $compileProvider )
@@ -8,7 +8,7 @@ app.config( [
     }
 ]);
 
-		app.controller('apiTestController', function($scope, $http) {	//Controller
+		app.controller('UIController', function($scope, $http) {	//Controller
 			$scope.tools;	//Tool list
 			$scope.selectedInputs = new Array('Sequence feature source');	//Currently selected tool
 			$scope.api;	//Api GET data is saved here

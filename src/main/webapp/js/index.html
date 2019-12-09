@@ -3,7 +3,7 @@
 <head>
 	<title>API Test</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.js"></script>	<!--AngularJS-->
-	<script src="apiTestController.js"></script>	<!--Controller file-->
+	<script src="UIController.js"></script>	<!--Controller file-->
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">	<!-- Google font "Open Sans" -->
 	<link rel="stylesheet" type="text/css" href="..\css\stylesheet.css">	<!-- Css file -->
 	<!--<script src="apiTest.js"></script>-->
@@ -11,7 +11,7 @@
 
 <body>
 	
-	<div ng-app="apiTest" ng-controller ="apiTestController">	<!--View-->
+	<div ng-app="UI" ng-controller ="UIController">	<!--View-->
 		<h1>bio.tools APE</h1>
 		<div id="options">
 			<div ng-init="getTypes(); getConstraintDescriptions();"></div>	<!-- Get data types from the backend -->
