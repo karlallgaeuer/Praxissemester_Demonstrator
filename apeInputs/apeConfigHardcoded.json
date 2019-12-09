@@ -13,5 +13,5 @@
   "number_of_generated_graphs" : 5,
   "debug_mode": "false",
   "use_workflow_input": "all",
-  "use_all_generated_data": "one",
+  "use_all_generated_data": "one"
 }
