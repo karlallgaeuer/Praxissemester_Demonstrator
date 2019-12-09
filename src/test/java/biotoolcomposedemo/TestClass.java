@@ -26,7 +26,7 @@ public class TestClass {
 		/** Test of the "Utils" class */
 		BufferedImage testImg = null;
 		try {
-			testImg = TestClassUtils.readImageFromFile("src/test/java/biotoolcomposedemo/resources/testImage.png");
+			testImg = TestClassUtils.readImageFromFile("src/test/resources/testImage.png");
 		} catch (IOException e) {
 			System.err.println("Reading of the test image didn't work.");
 		}
