@@ -1,9 +1,10 @@
-package model;
+package controller;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import controller.Application;
+import model.Utils;
+import nl.uu.cs.ape.sat.constraints.ConstraintTemplate;
 import nl.uu.cs.ape.sat.core.solutionStructure.ModuleNode;
 
 @RestController
@@ -128,38 +130,29 @@ public class TypesController {
 	}
 
 	@RequestMapping("/getConstraintDescriptions") // GET-Rest request
-	public static Map<String, List<Map<String, String>>> getConstraintDescriptions() {
+	public static List<Map<String, String>> getConstraintDescriptions() {
 		@SuppressWarnings("unused")
 		JSONObject constraints = null;
-		/**
-		Map<String, List<Map<String, String>>> map = new HashMap<>();
-		Map<String,String> map2 = new HashMap<>();
-		try {
-		File constraintsHardcoded = new File("apeInputs/constraint_templates.json");
-		constraints = new JSONObject(FileUtils.readFileToString(constraintsHardcoded, "UTF-8"));
-		}
-		catch(Exception e) {
-			System.err.println(e);
-		}
-		
-		JSONArray constraintsArray = (JSONArray) constraints.get("constraints");
-		for (int i = 0; i < constraintsArray.length(); i++) {
-			  JSONObject currConstraint = constraintsArray.getJSONObject(i);
-			  map2.put(currConstraint.get("constraintid").toString(),currConstraint.get("description").toString());
-			}
-		**/
 		
 		//get the constraints in the same structure as this: (this is a dummy map):
 		if (Application.apeInstance != null) {
 			// Create map, which saves both data types and formats
-			Map<String, List<Map<String, String>>> map = new HashMap<>();
-			map.put("constraints", Application.allDataTypes);
-			return map;
+			List<Map<String, String>> list = new ArrayList<Map<String, String>>();
+			Collection<ConstraintTemplate> constrTemplates = Application.apeInstance.getConstraintTemplates();
+			for(ConstraintTemplate currTempl : constrTemplates) {
+				Map<String, String> map = new HashMap<>();
+				map.put("value", currTempl.getConstraintID());
+				map.put("label", currTempl.getDescription());
+				list.add(map);
+			}
+			
+			return list;
 		} else {
 			System.err.println("Ontology doesn't exist.");
 			return null;
 		}
 	}
+
 
 	/**
 	 * @param APE config

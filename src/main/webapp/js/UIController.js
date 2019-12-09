@@ -120,15 +120,15 @@ app.config( [
 			/**
 			 * Add another output dropdown box-pair (data type and data format)
 			 */
-			$scope.constraintRows 
-			$scope.counter = 1;
-			$scope.addConstraint = function(){
-				// Copy the parent div
-				 var constraintDropdown = document.getElementById("constraintsSection").children[0];
-				 $scope.constraintRows.push('Row ' + $scope.counter +  constraintDropdown.options[constraintDropdown.selectedIndex].text) ;
-				 $scope.counter ++;
+			// $scope.constraintRows 
+			// $scope.counter = 1;
+			// $scope.addConstraint = function(){
+			// 	// Copy the parent div
+			// 	 var constraintDropdown = document.getElementById("constraintsSection").children[0];
+			// 	 $scope.constraintRows.push('Row ' + $scope.counter +  constraintDropdown.options[formatSelect.selectedIndex].text) ;
+			// 	 $scope.counter ++;
 				
-			}
+			// }
 
 			/**
 			 * Add another output dropdown box-pair (data type and data format)

@@ -72,6 +72,7 @@
 			</table>
 		  
 			<p>Constraints:</p>
+			<button class="button" ng-click="addConstraint()">+</button>
 			<table>
 				<tbody id="constraints">
 					<tr id="testID">
@@ -80,7 +81,6 @@
 								<option value="" label=""></option>
 							</select>
 						</td>
-						<td><button class="button" ng-click="addConstraint()">+</button></td>
 					</tr>
 					<tr ng-repeat="rowContent in constraintRows">
 						<td>{{rowContent}}</td>
