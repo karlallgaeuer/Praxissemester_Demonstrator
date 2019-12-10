@@ -118,11 +118,11 @@ public class ApeController {
 		JSONArray jsonImage = new JSONArray();
 		
 		results.getStream().forEach(solution -> {
-			BufferedImage controlFlow = solution.getControlflowGraph().getPNGImage();
+			BufferedImage dataFlow = solution.getDataflowGraph().getPNGImage();
 			
 			String encodedImage = null;
 			try {
-				encodedImage = Utils.getByteArrayFromImg(controlFlow);
+				encodedImage = Utils.getByteArrayFromImg(dataFlow);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

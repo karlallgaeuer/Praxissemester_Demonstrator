@@ -6,7 +6,6 @@
 	<script src="UIController.js"></script>	<!--Controller file-->
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">	<!-- Google font "Open Sans" -->
 	<link rel="stylesheet" type="text/css" href="..\css\stylesheet.css">	<!-- Css file -->
-	<!--<script src="apiTest.js"></script>-->
 </head>
 
 <style type="text/css">
@@ -15,7 +14,7 @@
 
 <body>
 	
-	<div ng-app="UI" ng-controller ="UIController">	<!--View-->
+	<div ng-app="UI" ng-controller ="UIController">
 
 		<div id="options">
 			<h1>bio.tools APE - Demo</h1>
@@ -135,13 +134,13 @@
 			<tbody>
 				<tr id="firstRow">
 					<th>Tool sequence</th>
-					<th>Graph</th>
-					<th>Complete tool sequence</th>
+					<th>Data Flow Image</th>
+					<th>Control Flow Image</th>
 				</tr>
 			    <tr ng-repeat="obj in mappedResults">
-					<td><span ng-repeat="x in obj.results track by $index">{{x}}<font ng-show="!$last">, </font></span></td>
-					<td><a href="data:image/png;base64,{{obj.controlFlowImages}}" target="_blank"><img src="data:image/png;base64,{{obj.controlFlowImages}}" width="200" height="200"></a></td>
+					<td><span ng-repeat="x in obj.simpleResults track by $index">{{x}}<font ng-show="!$last">, </font></span></td>
 					<td><a href="data:image/png;base64,{{obj.dataFlowImages}}" target="_blank"><img src="data:image/png;base64,{{obj.dataFlowImages}}" width="200" height="200"></a></td>
+					<td><a href="data:image/png;base64,{{obj.controlFlowImages}}" target="_blank"><img src="data:image/png;base64,{{obj.controlFlowImages}}" width="200" height="200"></a></td>
 				</tr>
 			</tbody>
 		</table>

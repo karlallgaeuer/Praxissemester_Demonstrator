@@ -95,7 +95,7 @@ var app = angular.module('UI', []);	//Creation of the Module
 				.then(function(response) {
 					$scope.simpleResults = response.data;
 					/** GET-request for the data flow images */
-					$http.get("http://localhost:8090/getDataFlowImg")
+					$http.get("http://localhost:8090/getDataFlowImg") // old full results
 					.then(function(response) {
 						$scope.dataFlowImages = response.data;
 						/** GET request for the control flow images */
