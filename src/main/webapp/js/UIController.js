@@ -1,56 +1,59 @@
 var app = angular.module('UI', []);	//Creation of the Module
-app.config( [
-    '$compileProvider',
-    function( $compileProvider )
-    {   
-        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
-        $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|content|blob|chrome-extension)|data:image\/|\/?img\//);
-    }
-]);
 
 		app.controller('UIController', function($scope, $http) {	//Controller
-			$scope.tools;	//Tool list
-			$scope.selectedInputs = new Array('Sequence feature source');	//Currently selected tool
-			$scope.api;	//Api GET data is saved here
-			$scope.dataTypes; // Data types
-			$scope.formatTypes;	// Format types
-			$scope.tools; // Tools
-			$scope.typeOptions //select element containing types
-			$scope.formatOptions //select element containing formats
-			$scope.toolOptions //select element containing tools
-			$scope.constraintRows = [];; // Constraints introduced
-			$scope.counterInputs = 1;	// Counter for input dropboxes
-			$scope.counterOutputs = 1;	// Counter for output dropboxes
-			$scope.solutionNumber = 10;
+			/** Tool list */
+			$scope.tools;
+			/** Currently selected tool */
+			$scope.selectedInputs = new Array('Sequence feature source');
+			/** Data type Array*/
+			$scope.dataTypes;
+			/** Format type array */
+			$scope.formatTypes;
+			/** Select element containing types */
+			$scope.typeOptions;
+			/** Select element containing formats */
+			$scope.formatOptions;
+			/** select element containing tools */
+			$scope.toolOptions;
+			/** Constraints introduced */
+			$scope.constraintRows = [];
+			/** Counter for input dropboxes */
+			$scope.counterInputs = 1;
+			/** Counter for output dropboxes */
+			$scope.counterOutputs = 1;
+			/** Number of solutions to be used for APE */
+			$scope.solutionNumber = 100;
+			/** Minimum length that the workflows should have */
 			$scope.minWorkflowLength = 1;
-			$scope.maxWorkflowLength= 5;
-			$scope.results;	// APE results
-			$scope.dataFlowImages; 
-			$scope.mappedResults;	// Includes results and "full results" in one array (so that looping with one ng-repeat is possible)
-			$scope.controlFlowImages;	// Array of the result-images
-			$scope.constraints;
-			$scope.dataString = "Data";
-			$scope.formatString = "Format";
-			/** boolean to check if results table should be shown or not **/
-			$scope.showTable = false;
+			/** Maximum length that the workflows should have */
+			$scope.maxWorkflowLength= 20;
+			/** APE-results in a very simple text form */
+			$scope.simpleResults;
+			/** Data Flow image array (results) */
+			$scope.dataFlowImages;
+			/** Control Flow image array (results) */
+			$scope.controlFlowImages;
+			/** Includes simpleResults, dataFlowImages and controlFlowImages in one array (so that looping with ng-repeats in index.html is possible) */
+			$scope.mappedResults;
 
+			$scope.constraints;
+			/** Boolean to check if results table should be shown or not **/
+			$scope.showTable = false;
+			
+			/** Combines the simpleResults, dataFlowImages and controlFlowImages arrays in one array */
 			$scope.mapResultArray = function(){
 				var mappedArray = [];
-				for(var i=0;i<$scope.results.length;i++){
+				for(var i=0;i<$scope.simpleResults.length;i++){
 					mappedArray.push({
-						'results':$scope.results[i],
-						'fullResults':$scope.fullResults[i],
-						'resultImages':$scope.resultImages[i]
+						'simpleResults':$scope.simpleResults[i],
+						'dataFlowImages':$scope.dataFlowImages[i],
+						'controlFlowImages':$scope.controlFlowImages[i]
 					});
 				}
 				return mappedArray;
 			}
-			$scope.getApi = function(selectedTool){	//Pulls api data of the selected tool
-				$http.get("https://bio.tools/api/biotools:".concat($scope.selectedTool,"?format=json")) 
-				.then(function(response){
-					$scope.api = response.data;	
-				});
-			}
+			
+			/** Fetches the data and format types*/
 			$scope.getTypes = function(){
 				$http.get("http://localhost:8090/getTypes")
 				.then(function(response) {
@@ -61,23 +64,21 @@ app.config( [
 				});	
 			}
 			
+			/** Fetches the constraint descriptions */
 			$scope.getConstraintDescriptions = function(){
 				$http.get("http://localhost:8090/getConstraintDescriptions")
 				.then(function(response) {
-					$scope.constraints = response.data; // CHange this to data.constraints
+					$scope.constraints = response.data;
 				});	
 			}
 			
 			/**
-			 * Send post request to APE
+			 * Send post request to APE to run it
 			 */
-			$scope.runApe = function(toSend){
-				//var data = param(toSend);	// Serialize JSON
-				var data = JSON.stringify(toSend);
-				$http.post("http://localhost:8090/run", data)
+			$scope.runApe = function(userInputsStringified){
+				$http.post("http://localhost:8090/run", userInputsStringified)
 	            .then(function(response) {
 	            	$scope.getResults();
-	            	// First run results is null, 2nd run the first results are used, 3rd run the 2nd results are used etc.
 	            	$scope.showTable = true;
 	                console.log(response.data);
 	            }, function(error){
@@ -89,16 +90,19 @@ app.config( [
 			 * Get results from APE
 			 */
 			$scope.getResults = function(){
-				$http.get("http://localhost:8090/getResults")
+				/** GET-request for the simple results */
+				$http.get("http://localhost:8090/getSimpleResults")
 				.then(function(response) {
-					$scope.results = response.data;
-					$http.get("http://localhost:8090/getDataFlowImg")	// Get request for the more detailed results
+					$scope.simpleResults = response.data;
+					/** GET-request for the data flow images */
+					$http.get("http://localhost:8090/getDataFlowImg")
 					.then(function(response) {
-						$scope.dataflowImages = response.data;
+						$scope.dataFlowImages = response.data;
+						/** GET request for the control flow images */
 						$http.get("http://localhost:8090/getControlFlowImg")
 						.then(function(response) {
 							$scope.controlFlowImages = response.data;
-							$scope.mappedResults = $scope.mapResultArray();	// See variable initialisation comment
+							$scope.mappedResults = $scope.mapResultArray();
 						});	
 					});	
 				});
@@ -108,48 +112,35 @@ app.config( [
 			 * Add another input dropdown box-pair (data type and data format)
 			 */
 			$scope.addInputs = function(){
-				// Copy the parent div
+				/** Copy the parent div */
 				var toCopy = document.getElementById("inputSection0");
 				var copy = angular.copy(toCopy);
 				
-		        //Change the ids of the copied parent-div, the copied data type dropdwon box and the copied data format dropdown box
+		        /** Change the ids of the copied parent-div, the copied data type dropdwon box and the copied data format dropdown box */
 		        copy.id = copy.id.substring(0,copy.id.length-1) + $scope.counterInputs;
 		        copy.children[0].id = copy.children[0].id.substring(0,copy.children[0].id.length-1) + $scope.counterInputs;
 		        copy.children[1].id = copy.children[1].id.substring(0,copy.children[1].id.length-1) + $scope.counterInputs;
 		        $scope.counterInputs++;
 		  
-		        // Append the copy to the cloneDiv container
+		        /** Append the copy to the cloneDiv container */
 		        angular.element(document.getElementById("inputs")).append(copy);
 			}
-			
-			/**
-			 * Add another output dropdown box-pair (data type and data format)
-			 */
-			// $scope.constraintRows 
-			// $scope.counter = 1;
-			// $scope.addConstraint = function(){
-			// 	// Copy the parent div
-			// 	 var constraintDropdown = document.getElementById("constraintsSection").children[0];
-			// 	 $scope.constraintRows.push('Row ' + $scope.counter +  constraintDropdown.options[formatSelect.selectedIndex].text) ;
-			// 	 $scope.counter ++;
-				
-			// }
 
 			/**
 			 * Add another output dropdown box-pair (data type and data format)
 			 */
 			$scope.addOutputs = function(){
-				// Copy the parent div
+				/** Copy the parent div */
 				var toCopy = document.getElementById("outputSection0");
 				var copy = angular.copy(toCopy);
 				
-		        //Change the ids of the copied parent-div, the copied data type dropdwon box and the copied data format dropdown box
+		        /** Change the ids of the copied parent-div, the copied data type dropdwon box and the copied data format dropdown box */
 		        copy.id = copy.id.substring(0,copy.id.length-1) + $scope.counterOutputs;
 		        copy.children[0].id = copy.children[0].id.substring(0,copy.children[0].id.length-1) + $scope.counterOutputs;
 		        copy.children[1].id = copy.children[1].id.substring(0,copy.children[1].id.length-1) + $scope.counterOutputs;
 		        $scope.counterOutputs++;
 		  
-		        // Insert new row into the outputs table body
+		        /** Insert new row into the outputs table body */
 		        angular.element(document.getElementById("outputs")).append(copy);
 			}
 
@@ -241,16 +232,16 @@ app.config( [
 			/**
 			 *  Gets the data from the type dropdown boxes and saves it
 			 */
-			
-			$scope.fetchTypes = function(){
-				var toSend = {	// Initial JSON-Object to be filled with inputs, outputs and the config data
+			$scope.fetchUserInputData = function(){
+				/** Initial JSON-Object to be filled with inputs, outputs and the config data */
+				var toSend = {
 						"inputs": [],
 						"outputs": [],
 						"solution_min_length": "",
 						"solution_max_length": "",
 						"max_solutions": ""
 				};
-				// Iterate through the input dropdown-boxes
+				/** Iterate through the input dropdown-boxes */
 				var index1 = 0;
 				for(i = 0; i < $scope.counterInputs; i++){
 					var typeSelect = document.getElementById("dataMenuInputs" + i).children[0];
@@ -274,7 +265,7 @@ app.config( [
 						}
 					}
 				}
-				// Iterate through the output dropdown-boxes
+				/** Iterate through the output dropdown-boxes */
 				var index2 = 0;
 				for(i = 0; i < $scope.counterOutputs; i++){
 					var typeSelect = document.getElementById("dataMenuOutputs" + i).children[0];
@@ -298,11 +289,13 @@ app.config( [
 						}
 					}
 				}
-				// Fill the config field
+				/** Fill the config field */
 				toSend.solution_min_length = $scope.minWorkflowLength;
 				toSend.solution_max_length = $scope.maxWorkflowLength;
 				toSend.max_solutions = $scope.solutionNumber;
-				$scope.testData = toSend;
+				/** Serialize JSON */
+				var toSendStringified = JSON.stringify(toSend);
+				/** Running APE */
 				$scope.runApe(toSend);
 			}
 		});
