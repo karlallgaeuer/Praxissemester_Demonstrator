@@ -34,6 +34,13 @@ public class Application {
 	public static List<Map<String, String>> allDataTypes = new ArrayList<Map<String, String>>();
 	/** List of two String pairs format type label and format type id */
 	public static List<Map<String, String>> allFormatTypes = new ArrayList<Map<String, String>>();
+<<<<<<< HEAD
+=======
+	/** List of two String pairs tool label and tool id */
+	public static List<Map<String, String>> allTools = new ArrayList<Map<String, String>>();
+	/** Result object */
+	public static SATsolutionsList results;
+>>>>>>> branch 'master' of git@git.science.uu.nl:v.kasalica/biotoolcomposedemo.git
 	
 	public static void main(String[] args) throws Exception {
     	/** Fetch tool annotations */
@@ -46,8 +53,9 @@ public class Application {
 		try {
 			/** Create APE instance */
 			apeInstance = new APE("./apeInputs/apeConfigHardcoded.json");
-			allDataTypes = apeInstance.getTypeElements("Data");
-	    	allFormatTypes = apeInstance.getTypeElements("Format");
+			allDataTypes = apeInstance.getTaxonomyElements("Data");
+	    	allFormatTypes = apeInstance.getTaxonomyElements("Format");
+	    	allTools = apeInstance.getTaxonomyElements("Operation");
 		} catch (JSONException e) {
 			System.err.println("Error in parsing the configuration file.");
 		} 

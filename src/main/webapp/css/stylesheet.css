@@ -1,38 +1,29 @@
-html {
-	background-color: #f5f5f5;
-}
-body {
-	font-family: "Open Sans",sans-serif;
-  	font-size: 21px;
-    line-height: 1.42857143;
-    color: #333;
+html, body {
+	height: 100%;
 }
 
-#options {
+body {
+	font-family: 'Open Sans', sans-serif;
+	font-weight: 300;
+	word-wrap: break-word;
+}
+
+/* style for the info/intro box at the top of the page */
+/* (change to some more meaningful name) */
+#options{
 	font-family: inherit;
 	background-color: #d9edf7;
-    border: 1px solid #d3d3d3;
-    border-radius: 6px;
-    box-sizing: border-box;
-    font-weight: 200;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    margin-bottom: 30px;
-    padding-left: 6px;
-    color:#333;
+	border: 1px solid #d3d3d3;
+	border-radius: 6px;
+	box-sizing: border-box;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	margin-bottom: 30px;
+	padding-left: 30px;
+	color:#333;
 }
 
-#inputs {
-	font-size: 14px;
-}
 
-#outputs {
-	font-size: 14px;
-}
-
-#config{
-	font-size: 14px;
-}
 #results table{
 	border: 1px solid #d3d3d3;
 	border-radius: 6px;
@@ -46,22 +37,6 @@ body {
 	background-color: #d9edf7;
 }
 
-h1 {
- 	font-family: inherit;
- 	color: #000;
- 	font-weight: 500;
- 	font-size: 36px;
-    line-height: 1.1;
-    background-color: #d9edf7;
-    border: 1px solid #d3d3d3;
-    border-radius: 6px;
-    box-sizing: border-box;
-    padding-top: 30px;
-    padding-bottom: 30px;
-    margin-bottom: 30px;
-    padding-left: 6px;
-}
-
 .button {
 	font-family: inherit;
 	background-color:#ffffff;
@@ -71,19 +46,19 @@ h1 {
 	color:#333;
 	padding:4px 13px;
 	text-decoration:none;
-	font-size: 21px;
+	font-size: 14px;
 }
 
 .runButton {
 	font-family: inherit;
 	background-color:#c2e7ff;
 	border-radius:6px;
-	border:2px solid #434343;
+	border:1px solid #434343;
 	display:inline-block;
 	color:#333;
 	padding:8px 26px;
 	text-decoration:none;
-	font-size: 21px;
+	font-size: 14px;
 	margin-bottom: 30px;
 }
 
