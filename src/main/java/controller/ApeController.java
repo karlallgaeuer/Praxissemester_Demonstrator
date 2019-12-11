@@ -157,6 +157,22 @@ public class ApeController {
 			return null;
 		}
 	}
+	
+	/**
+	 * @return map with format/data types (spring transforms it to Json)
+	 */
+	@RequestMapping("/writeConstraints")
+	public void writeConstraints(@RequestBody String constraint) {
+			/** Create map, whic
+			 * h saves both data types and formats **/
+		
+			try {
+				Application.writeToFile(constraint, "apeInputs/constraints.json");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
 
 
 	/**

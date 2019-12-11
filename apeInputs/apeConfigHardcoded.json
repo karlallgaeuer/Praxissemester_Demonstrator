@@ -4,7 +4,7 @@
   "dataTaxonomyRoot": "",
   "dataSubTaxonomyRoot": ["Data", "Format"],
   "tool_annotations_path": "./apeInputs/toolAnnotations.json",
-  "constraints_pathx": "./constraints.json",
+  "constraints_path": "./apeInputs/constraints.json",
   "shared_memory": "true",
   "solutions_path": "./results/sat_solutions.txt",
   "execution_scripts_folder": "./results/",
