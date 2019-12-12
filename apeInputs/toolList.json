@@ -16,5 +16,6 @@
 	"biotools:peptideshaker",
 	"biotools:proteinprophet",
 	"biotools:protk",
-	"biotools:PTMProphet"
+	"biotools:PTMProphet",
+	"biotools:ssrcalc"
 ]

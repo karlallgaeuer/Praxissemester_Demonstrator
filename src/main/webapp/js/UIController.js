@@ -22,7 +22,7 @@ var app = angular.module('UI', []);	//Creation of the Module
 			/** Counter for output dropboxes */
 			$scope.counterOutputs = 1;
 			/** Number of solutions to be used for APE */
-			$scope.solutionNumber = 100;
+			$scope.solutionNumber = 20;
 			/** Minimum length that the workflows should have */
 			$scope.minWorkflowLength = 1;
 			/** Maximum length that the workflows should have */
@@ -48,7 +48,7 @@ var app = angular.module('UI', []);	//Creation of the Module
 				//$scope.dropdownModelNameDataInput = {label: 'Mass spectrometry', value: 'object:10' };
 				//$scope.dropdownModelNameDataInput = "object:10";
 				//$scope.useCase1Selects = true;
-				document.getElementById("dataMenuInputs0").children[0].selected = true;
+				document.getElementById("testID1").selected = true;
 			}
 			
 			/** Set up use case 2 */
