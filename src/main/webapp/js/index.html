@@ -23,10 +23,10 @@
 			and APE! You can test any of the four use cases described in the
 			Bioinformatics paper on <a href="https://doi.org/10.1093/bioinformatics/bty646">Automated workflow Composition in Mass Spectrometry Based Proteomics<a>, 
 			or create your own requests. </p>
-			<p><button class="button" ng-click="fillUseCase1">Use Case 1</button>
-			<button class="button" ng-click="fillUseCase2">Use Case 2</button>
-			<button class="button" ng-click="fillUseCase3">Use Case 3</button>
-			<button class="button" ng-click="fillUseCase4">Use Case 4</button></p>
+			<p><button class="button" ng-click="fillUseCase1()">Use Case 1</button>
+			<button class="button" ng-click="fillUseCase2()">Use Case 2</button>
+			<button class="button" ng-click="fillUseCase3()">Use Case 3</button>
+			<button class="button" ng-click="fillUseCase4()">Use Case 4</button></p>
 		</div>
 		
 		<div id="options">
@@ -47,7 +47,7 @@
 					</tr>
 					<tr id="inputSection0">
 						<td id="dataMenuInputs0">
-							<select ng-model="dropdownModelNameDataInput" ng-options="x as x.label for x in dataTypes">
+							<select ng-model="dropdownModelNameDataInput" ng-options="x.value as x.label for x in dataTypes">
 								<option></option>
 							</select>	<!--Dropdown list with data types -->
 						</td>

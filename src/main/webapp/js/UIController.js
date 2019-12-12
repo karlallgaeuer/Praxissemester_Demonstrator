@@ -42,12 +42,13 @@ var app = angular.module('UI', []);	//Creation of the Module
 			
 			
 			
-			//$scope.dropdownModelNameDataInput;
 			/** Set up use case 1 */
 			$scope.fillUseCase1 = function(){
-				//document.getElementById("firstDataMenuInput").children[0].value = "object:10";
+				//document.getElementById("dataMenuInputs0").children[0].value = "string:Mass spectrometry data format";
 				//$scope.dropdownModelNameDataInput = {label: 'Mass spectrometry', value: 'object:10' };
 				//$scope.dropdownModelNameDataInput = "object:10";
+				//$scope.useCase1Selects = true;
+				document.getElementById("dataMenuInputs0").children[0].selected = true;
 			}
 			
 			/** Set up use case 2 */
@@ -254,7 +255,7 @@ var app = angular.module('UI', []);	//Creation of the Module
 			}
 			
 			/**
-			 *  Gets the data from the type dropdown boxes and saves it
+			 *  Gets the data from the type dropdown boxes and saves it and then runs APE
 			 */
 			$scope.fetchUserInputData = function(){
 				/** Initial JSON-Object to be filled with inputs, outputs and the config data */
