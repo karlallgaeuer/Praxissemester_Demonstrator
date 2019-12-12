@@ -45,7 +45,7 @@ public class Application {
     	/** Fetch ontology */
     	fetchAndWriteOntology("http://edamontology.org/EDAM.owl", "apeInputs/ontology.owl");
     	/** Write tool annotations in the inputs folder */
-		writeToolAnnotationsFile(toolAnnotations, "apeInputs/toolAnnotations.json");	
+		writeToFile(toolAnnotations.toString(), "apeInputs/toolAnnotations.json");	
 		
 		try {
 			/** Create APE instance */
@@ -78,10 +78,10 @@ public class Application {
      * Writes file with toolAnnotations
      * @throws IOException
      */
-    public static void writeToolAnnotationsFile(JSONObject toolAnnotations, String pathToTools) throws IOException {
+    public static void writeToFile(String toolAnnotations, String pathToTools) throws IOException {
     	File toolAnnotationsFile = new File(pathToTools);
     	BufferedWriter writer = new BufferedWriter(new FileWriter(toolAnnotationsFile));
-        writer.write(toolAnnotations.toString());
+        writer.write(toolAnnotations);
         writer.close();
     }
     

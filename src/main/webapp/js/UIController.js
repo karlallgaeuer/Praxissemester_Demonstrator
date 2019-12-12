@@ -100,6 +100,14 @@ var app = angular.module('UI', []);	//Creation of the Module
 			/**
 			 * Send post request to APE to run it
 			 */
+			$scope.writeConstraints = function(constraints){
+				$http.post("http://localhost:8090/writeConstraints", constraints);
+			}
+
+
+			/**
+			 * Send post request to APE to run it
+			 */
 			$scope.runApe = function(userInputsStringified){
 				$http.post("http://localhost:8090/run", userInputsStringified)
 	            .then(function(response) {
@@ -206,7 +214,7 @@ var app = angular.module('UI', []);	//Creation of the Module
 			 * Add a row for each constraint that's specified
 			 */
 			$scope.constraintRows 
-			$scope.counter = 1;
+			$scope.counter = 0;
 			$scope.addConstraint = function(){
 
 				    if($scope.typeOptions == null){
@@ -234,24 +242,36 @@ var app = angular.module('UI', []);	//Creation of the Module
 				var tableBody = document.getElementById("constraints");
 				var row = document.createElement('tr');
 				tableBody.appendChild(row);
+				
 				var cell = document.createElement('td');
 				row.appendChild(cell);
-
+				cell.setAttribute("id", "constr_"+ $scope.counter);
+				cell.setAttribute("class", selectedConstraint.constraintID);
+				cell.setAttribute("params", paramSize);
+				
+				
 				for(i = 0; i<paramSize; i++){
 					cell.append(templateParts[i]);
 					 if(selectedConstraint.parameters[i].length == 1){
-						
-						var copy = angular.copy($scope.toolsOptions);
-						cell.append(copy); 
+						var newToolSelect = angular.copy($scope.toolsOptions);
+						newToolSelect.setAttribute("id", "constr_" + $scope.counter + "_param_"+ i + 0);
+						newToolSelect.setAttribute("dimensionNo", 1);
+						cell.append(newToolSelect); 
 					 } else {
-						var copy1 = angular.copy($scope.typeOptions);
-						cell.append(copy1); 
-						var copy2 = angular.copy($scope.formatOptions);
-						cell.append(copy2); 
+						var newTypeSelect = angular.copy($scope.typeOptions);
+						newTypeSelect.setAttribute("id", "constr_" + $scope.counter + "_param_"+ i + 0);
+						newTypeSelect.setAttribute("dimensionNo", 2);
+						cell.append(newTypeSelect); 
+						var newFormatSelect = angular.copy($scope.formatOptions);
+						newFormatSelect.setAttribute("id", "constr_" + $scope.counter + "_param_"+ i + 1);
+						newFormatSelect.setAttribute("dimensionNo", 2);
+						cell.append(newFormatSelect); 
 					 }
 				}
 				cell.append(templateParts[paramSize]);
-				
+
+
+				$scope.counter++;
 			}
 			
 			/**
@@ -314,6 +334,40 @@ var app = angular.module('UI', []);	//Creation of the Module
 						}
 					}
 				}
+				/** Get all the constraints. */
+				var allConstraints = {
+						"constraints": [],
+				};
+				for(i = 0; i < $scope.counter ; i++){
+					var currConstraint = {
+						"constraintid" : "",
+						"parameters" : []
+					};
+					var constraintCell = document.getElementById("constr_" + i);
+					currConstraint.constraintid = constraintCell.getAttribute("class");
+					var constrParams = constraintCell.getAttribute("params");
+
+					for(j = 0; j < constrParams; j++){
+						var parameterDimensions = [];
+						var currParam = document.getElementById("constr_" + i + "_param_"+ j + 0);
+						var dimensionNo = 0;
+						if(currParam != null){
+							parameterDimensions.push(currParam.value);
+							dimensionNo = currParam.getAttribute("dimensionNo");
+						}
+						for(dim = 1; dim < dimensionNo; dim++){
+							currParam = document.getElementById("constr_" + i + "_param_"+ j + dim);
+							if(currParam != null){
+								parameterDimensions.push(currParam.value);
+							}
+						}
+						currConstraint["parameters"].push(parameterDimensions);
+					}
+					allConstraints["constraints"].push(currConstraint);
+				}
+				var allConstraintsStr = JSON.stringify(allConstraints);
+				$scope.writeConstraints(allConstraintsStr);
+
 				/** Fill the config field */
 				toSend.solution_min_length = $scope.minWorkflowLength;
 				toSend.solution_max_length = $scope.maxWorkflowLength;
