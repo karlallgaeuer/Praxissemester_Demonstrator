@@ -40,32 +40,6 @@ var app = angular.module('UI', []);	//Creation of the Module
 			/** Boolean to check if results table should be shown or not **/
 			$scope.showTable = false;
 			
-			
-			
-			/** Set up use case 1 */
-			$scope.fillUseCase1 = function(){
-				//document.getElementById("dataMenuInputs0").children[0].value = "string:Mass spectrometry data format";
-				//$scope.dropdownModelNameDataInput = {label: 'Mass spectrometry', value: 'object:10' };
-				//$scope.dropdownModelNameDataInput = "object:10";
-				//$scope.useCase1Selects = true;
-				document.getElementById("testID1").selected = true;
-			}
-			
-			/** Set up use case 2 */
-			$scope.fillUseCase2 = function(){
-				
-			}
-			
-			/** Set up use case 3 */
-			$scope.fillUseCase3 = function(){
-				
-			}
-			
-			/** Set up use case 4 */
-			$scope.fillUseCase4 = function(){
-				
-			}
-			
 			/** Combines the simpleResults, dataFlowImages and controlFlowImages arrays in one array */
 			$scope.mapResultArray = function(){
 				var mappedArray = [];
