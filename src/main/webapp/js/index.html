@@ -23,7 +23,7 @@
 			and APE! You can test any of the four use cases described in the
 			Bioinformatics paper on <a href="https://doi.org/10.1093/bioinformatics/bty646">Automated workflow Composition in Mass Spectrometry Based Proteomics<a>, 
 			or create your own requests. </p>
-			<p><button class="button" ng-click="dropdownModelNameDataInput = 'Mass spectrometry data'; dropdownModelNameFormatInput='Thermo RAW'; dropdownModelNameDataOutput='Amino acid property'; dropdownModelNameFormatOutput=''">Use Case 1</button>
+			<p><button class="button" ng-click="dropdownModelNameDataInput = 'Mass spectrometry data'; dropdownModelNameFormatInput='Thermo RAW'; dropdownModelNameDataOutput='Amino acid index (hydropathy)'; dropdownModelNameFormatOutput=''">Use Case 1</button>
 			<button class="button" ng-click="dropdownModelNameDataInput = 'Mass spectrometry data'; dropdownModelNameFormatInput='Thermo RAW'; dropdownModelNameDataOutput='Pathway or network'; dropdownModelNameFormatOutput=''">Use Case 2</button>
 			<button class="button" ng-click="dropdownModelNameDataInput = 'Mass spectrometry data'; dropdownModelNameFormatInput='Thermo RAW'; dropdownModelNameDataOutput='Peptide identification';dropdownModelNameFormatOutput=''">Use Case 3</button>
 			<button class="button" ng-click="dropdownModelNameDataInput = 'Mass spectrometry data'; dropdownModelNameFormatInput='Thermo RAW'; dropdownModelNameDataOutput='Gene expression profile'; dropdownModelNameFormatOutput=''">Use Case 4</button></p>
@@ -47,12 +47,12 @@
 					</tr>
 					<tr id="inputSection0">
 						<td id="dataMenuInputs0">
-							<select ng-model="dropdownModelNameDataInput" ng-options="x.value as x.label for x in dataTypes">
+							<select ng-model="dropdownModelNameDataInput" ng-options="x.value as x.label for x in dataTypes | orderBy:'label'">
 								<option value="" label=""></option>
 							</select>	<!--Dropdown list with data types -->
 						</td>
 						<td id="formatMenuInputs0">
-							<select ng-model="dropdownModelNameFormatInput" ng-options="x.value as x.label for x in formatTypes">	<!--Dropdown list with format types -->
+							<select ng-model="dropdownModelNameFormatInput" ng-options="x.value as x.label for x in formatTypes | orderBy:'label'">	<!--Dropdown list with format types -->
 								<option value="" label=""></option>
 							</select>
 						</td>
@@ -76,12 +76,12 @@
 					</tr>
 					<tr id="outputSection0">	<!-- One input with a format type and a data type-->
 						<td id="dataMenuOutputs0">
-							<select ng-model=dropdownModelNameDataOutput ng-options="x.value as x.label for x in dataTypes">	<!--Dropdown list with data types -->
+							<select ng-model=dropdownModelNameDataOutput ng-options="x.value as x.label for x in dataTypes | orderBy:'label'">	<!--Dropdown list with data types -->
 								<option value="" label=""></option>
 							</select>
 						</td>
 						<td id="formatMenuOutputs0">
-							<select ng-model=dropdownModelNameFormatOutput ng-options="x.value as x.label for x in formatTypes">	<!--Dropdown list with format types -->
+							<select ng-model=dropdownModelNameFormatOutput ng-options="x.value as x.label for x in formatTypes | orderBy:'label'">	<!--Dropdown list with format types -->
 								<option value="" label=""></option>
 							</select>
 						</td>
