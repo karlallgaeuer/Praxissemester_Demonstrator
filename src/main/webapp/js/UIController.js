@@ -1,4 +1,33 @@
-var app = angular.module('UI', []);	//Creation of the Module
+var app = angular.module('UI', [], function ($compileProvider) {
+	 $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|file|tel):/); // Not working (supposed to remove unsafe tag when opening picture links)
+});	//Creation of the Module
+
+app.directive('dir1', function () { // Directive for the data flow picture links
+    return {
+        restrict: 'A',
+        scope: {},
+        link: function($scope, element, attrs) {
+            if (element[0].tagName !== 'A') {
+                return;
+            }
+            element[0].href = 'data:image/png;base64,{{obj.dataFlowImages}}';
+        }
+    };
+ });
+
+app.directive('dir2', function () { // Directive for the control flow picture links
+    return {
+        restrict: 'A',
+        scope: {},
+        link: function($scope, element, attrs) {
+            if (element[0].tagName !== 'A') {
+                return;
+            }
+            element[0].href = 'data:image/png;base64,{{obj.controlFlowImages}}';
+        }
+    };
+ });
+
 
 		app.controller('UIController', function($scope, $http) {	//Controller
 			/** Tool list */
@@ -39,7 +68,8 @@ var app = angular.module('UI', []);	//Creation of the Module
 			$scope.constraints;
 			/** Boolean to check if results table should be shown or not **/
 			$scope.showTable = false;
-			
+			 
+			 
 			/** Combines the simpleResults, dataFlowImages and controlFlowImages arrays in one array */
 			$scope.mapResultArray = function(){
 				var mappedArray = [];
@@ -190,7 +220,6 @@ var app = angular.module('UI', []);	//Creation of the Module
 			$scope.constraintRows 
 			$scope.counter = 0;
 			$scope.addConstraint = function(){
-
 				    if($scope.typeOptions == null){
 						$scope.typeOptions = getTypeOptions();
 					}
