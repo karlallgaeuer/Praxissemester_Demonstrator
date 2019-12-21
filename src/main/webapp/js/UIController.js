@@ -2,7 +2,7 @@ var app = angular.module('UI', [], function ($compileProvider) {
 	 $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|file|tel):/); // Not working (supposed to remove unsafe tag when opening picture links)
 });	//Creation of the Module
 
-app.directive('dir1', function () { // Directive for the data flow picture links
+app.directive('dir1', function () { // Directive for the data flow picture links (Currently not working correctly)
     return {
         restrict: 'A',
         scope: {},
@@ -15,7 +15,7 @@ app.directive('dir1', function () { // Directive for the data flow picture links
     };
  });
 
-app.directive('dir2', function () { // Directive for the control flow picture links
+app.directive('dir2', function () { // Directive for the control flow picture links (Currently not working correctly)
     return {
         restrict: 'A',
         scope: {},
@@ -29,7 +29,7 @@ app.directive('dir2', function () { // Directive for the control flow picture li
  });
 
 
-		app.controller('UIController', function($scope, $http) {	//Controller
+		app.controller('UIController', function($scope, $http, $filter) {	//Controller
 			/** Tool list */
 			$scope.tools;
 			/** Currently selected tool */
@@ -69,7 +69,13 @@ app.directive('dir2', function () { // Directive for the control flow picture li
 			/** Boolean to check if results table should be shown or not **/
 			$scope.showTable = false;
 			 
-			 
+			/** Sorts the tool, dataTypes and formatTypes lists **/
+			$scope.sortLists = function(){
+				$scope.tools = $filter('orderBy')($scope.tools, 'label');
+				$scope.dataTypes = $filter('orderBy')($scope.dataTypes, 'label');
+				$scope.formatTypes = $filter('orderBy')($scope.formatTypes, 'label');
+			} 
+			
 			/** Combines the simpleResults, dataFlowImages and controlFlowImages arrays in one array */
 			$scope.mapResultArray = function(){
 				var mappedArray = [];
@@ -220,6 +226,7 @@ app.directive('dir2', function () { // Directive for the control flow picture li
 			$scope.constraintRows 
 			$scope.counter = 0;
 			$scope.addConstraint = function(){
+					$scope.sortLists(); 
 				    if($scope.typeOptions == null){
 						$scope.typeOptions = getTypeOptions();
 					}
