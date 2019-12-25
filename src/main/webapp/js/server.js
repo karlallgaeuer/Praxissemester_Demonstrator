@@ -3,7 +3,7 @@ var fs = require("fs");
 
 http.createServer(function(request, response) {
   if(/(.*?).css$/.test(request.url.toString())){
-     sendFileContent(response, request.url.toString().substring(1), "text/css");
+     sendFileContent(response, '../css/stylesheet.css', "text/css");
   }else if(/(.*?).js$/.test(request.url.toString())){
     sendFileContent(response, request.url.toString().substring(1), "text/javascript");
   }else if(/(.*?).html$/.test(request.url.toString())){
