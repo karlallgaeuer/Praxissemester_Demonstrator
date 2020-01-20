@@ -1,7 +1,14 @@
 var app = angular.module('UI', [], function ($compileProvider) {
-	 $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|file|tel):/); // Not working (supposed to remove unsafe tag when opening picture links)
-});	//Creation of the Module
+//	 $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|file|tel):/); // Not working (supposed to remove unsafe tag when opening picture links)
+});
 
+//Creation of the Module
+
+app.config(['$compileProvider',	// Serve Downloads
+    function ($compileProvider) {
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
+}]);
+/**
 app.directive('dir1', function () { // Directive for the data flow picture links (Currently not working correctly)
     return {
         restrict: 'A',
@@ -26,7 +33,7 @@ app.directive('dir2', function () { // Directive for the control flow picture li
             element[0].href = 'data:image/png;base64,{{obj.controlFlowImages}}';
         }
     };
- });
+ }); **/
 
 
 		app.controller('UIController', function($scope, $http, $filter) {	//Controller
@@ -62,9 +69,8 @@ app.directive('dir2', function () { // Directive for the control flow picture li
 			$scope.dataFlowImages;
 			/** Control Flow image array (results) */
 			$scope.controlFlowImages;
+//			$scope.controlFlowBlobs;
 			/** Includes simpleResults, dataFlowImages and controlFlowImages in one array (so that looping with ng-repeats in index.html is possible) */
-			$scope.mappedResults;
-
 			$scope.constraints;
 			/** Boolean to check if results table should be shown or not **/
 			$scope.showTable = false;
@@ -76,17 +82,58 @@ app.directive('dir2', function () { // Directive for the control flow picture li
 				$scope.formatTypes = $filter('orderBy')($scope.formatTypes, 'label');
 			} 
 			
-			/** Combines the simpleResults, dataFlowImages and controlFlowImages arrays in one array */
-			$scope.mapResultArray = function(){
-				var mappedArray = [];
+			/** Combines the simpleResults, dataFlowImages and controlFlowImages arrays in one array and creates correct amount of checkboxes*/
+			$scope.buildResultsTable = function(){
 				for(var i=0;i<$scope.simpleResults.length;i++){
-					mappedArray.push({
-						'simpleResults':$scope.simpleResults[i],
-						'dataFlowImages':$scope.dataFlowImages[i],
-						'controlFlowImages':$scope.controlFlowImages[i]
-					});
+					/** Create new row element **/
+					var newRow = document.createElement("tr");
+					newRow.id = "row" + i;
+					
+					/** Create checkbox cell **/
+					var tdCheckbox = document.createElement("td");
+					tdCheckbox.id = "tdCheckboxId" + i;
+					/** Create checkbox element **/
+					var checkbox = document.createElement("input");
+					checkbox.type="checkbox";
+					checkbox.id = "checkbox" + i;
+					checkbox.value = i;
+					checkbox.onclick = "checkboxChecked(this);";
+					/** Save checkbox values **/
+					/** Append checkbox element to checkbox cell **/
+					tdCheckbox.appendChild(checkbox);
+					/** Append checkbox cell to the row **/
+					newRow.appendChild(tdCheckbox);
+					
+					/** Append simple result to the new row **/
+					var tdSimpleResults = document.createElement("td");
+					tdSimpleResults.id = "tdSimpleResultsId" + i;
+					var currSimpleResult = $scope.simpleResults[i] + " ";
+					tdSimpleResults.innerText = currSimpleResult;
+					newRow.appendChild(tdSimpleResults);
+					
+					/** Append data flow image to the new row **/
+					var tdDataFlowImage = document.createElement("td");
+					tdDataFlowImage.id = "tdDataFlowImageId" + i;
+					var currDataFlowImage = document.createElement('img');
+					currDataFlowImage.src = "data:image/png;base64," + $scope.dataFlowImages[i];
+					currDataFlowImage.width = "200";
+					currDataFlowImage.height = "200";
+					tdDataFlowImage.append(currDataFlowImage);
+					newRow.appendChild(tdDataFlowImage);
+					
+					/** Append control flow image to the new row **/
+					var tdControlFlowImage = document.createElement("td");
+					tdControlFlowImage.id = "tdControlFlowImageId" + i;
+					var currControlFlowImage = document.createElement('img');
+					currControlFlowImage.src = "data:image/png;base64," + $scope.controlFlowImages[i];
+					currControlFlowImage.width = "200";
+					currControlFlowImage.height = "200";
+					tdControlFlowImage.append(currControlFlowImage);
+					newRow.appendChild(tdControlFlowImage);
+					
+					/** Append the new row **/
+					document.getElementById("resultsBody").appendChild(newRow);
 				}
-				return mappedArray;
 			}
 			
 			/** Fetches the data and format types*/
@@ -145,11 +192,32 @@ app.directive('dir2', function () { // Directive for the control flow picture li
 						$http.get("http://localhost:8090/getControlFlowImg")
 						.then(function(response) {
 							$scope.controlFlowImages = response.data;
-							$scope.mappedResults = $scope.mapResultArray();
+							$scope.buildResultsTable();
 						});	
 					});	
 				});
 			}
+			
+			
+			/*
+			 * Save images locally
+			 */
+//			
+//			$scope.saveImagesLocally = function(){
+//				/* Name of the data flow image files */
+//				dataFlowImageName = "dataFlowImage";
+//				/* Name of the control flow image files */
+//				controlFlowImageName = "controlFlowImage";
+//				/* Loops through the image arrays and saves them locally */
+//				 for (var i=0; i<dataFlowImages.length; i++) {
+//				      var blobData = new Blob(dataFlowImages[i], {type: 'image/png'});
+//					  var fileData = new File(blobData, dataFlowImageName + i + ".png");
+//					  var blobControl = new Blob(controlFlowImages[i], {type: 'image/png'});
+//					  $scope.controlFlowBlobs.push((window.URL || window.webkitURL).createObjectURL(blobControl));
+//					  var fileControl = new File(blobControl, controlFlowImageName + i + ".png");
+//					  
+//				    }
+//			}
 			
 			/**
 			 * Add another input dropdown box-pair (data type and data format)

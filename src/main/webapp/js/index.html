@@ -5,7 +5,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.js"></script>	<!--AngularJS-->
 	<script src="UIController.js"></script>	<!--Controller file-->
   	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans">	<!-- Google font "Open Sans" -->
-	<link rel="stylesheet" type="text/css" href="..\css\stylesheet.css">	<!-- Css file -->
+    <link rel="stylesheet" href="..\css\stylesheet.css">	<!-- Css file -->
 </head>
 
 <style type="text/css">
@@ -131,21 +131,23 @@
 		<button class="runButton" ng-click="fetchUserInputData()">Run</button>
 		
 		<table id="results" ng-show="showTable">
-			<tbody>
+			<tbody id="resultsBody">
 				<tr id="firstRow">
+					<th><input ng-model="dummy" type="checkbox" checked="true"></th>
 					<th>Tool sequence</th>
 					<th>Data Flow Image</th>
 					<th>Control Flow Image</th>
 				</tr>
-			    <tr ng-repeat="obj in mappedResults">
+				<!--
+			    <tr id="secondRow">
+			    	<td><span ng-repeat="x in obj.checkboxesMapped">{{x}}</span></td>
 					<td><span ng-repeat="x in obj.simpleResults track by $index">{{x}}<font ng-show="!$last">, </font></span></td>
 					<td><a href="data:image/png;base64,{{obj.dataFlowImages}}" target="_blank" dir1><img src="data:image/png;base64,{{obj.dataFlowImages}}" width="200" height="200"></a></td>
-					<td><a href="data:image/png;base64,{{obj.controlFlowImages}}" target="_blank" dir2><img src="data:image/png;base64,{{obj.controlFlowImages}}" width="200" height="200"></a></td>
-				</tr>
+					<td><a href="{{obj.controlFlowBlobs}}" target="_blank" dir2><img ng-src="{{obj.controlFlowBlobs}}" width="200" height="200"></a></td>
+				</tr> -->
 			</tbody>
-		</table>
-		
-	</div>
+		</table>	
+	</div>	
 </body>
 
 </html>
