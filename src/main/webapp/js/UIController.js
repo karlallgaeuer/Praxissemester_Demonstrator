@@ -4,10 +4,10 @@ var app = angular.module('UI', [], function ($compileProvider) {
 
 //Creation of the Module
 
-app.config(['$compileProvider',	// Serve Downloads
+/**app.config(['$compileProvider',	// Serve Downloads
     function ($compileProvider) {
         $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|tel|file|blob):/);
-}]);
+}]);**/
 /**
 app.directive('dir1', function () { // Directive for the data flow picture links (Currently not working correctly)
     return {
