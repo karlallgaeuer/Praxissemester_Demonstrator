@@ -11,7 +11,7 @@ http.createServer(function(request, response) {
   }else if(request.url.toString().substring(1) == ''){
     sendFileContent(response, "index.html", "text/html");
   }
-}).listen(3000);
+}).listen(8080, "0.0.0.0");
 
 function sendFileContent(response, fileName, contentType){
   fs.readFile(fileName, function(err, data){
