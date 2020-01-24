@@ -4,3 +4,4 @@ List of things not working:
 -Error when opening the project with enabled browser security ("Access to XMLHttpRequest at 'http://localhost:8090/getTypes' from origin 'http://localhost:8080' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.")
 -Duplicate type/format entries in the dropdown boxes (They are present more than once in the ontology)
 -Checkboxes don't change their state
+-No space after comma  in tool sequence (in the results table)
