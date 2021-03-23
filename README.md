@@ -44,7 +44,7 @@ composed from bio.tools through an easy-to-use web interface.
 
 9.  Run Application.java (Starts the backend with Spring Boot (for the REST-API))
 
-10.  In the command line, go into the directory "~/git/biotoolcompesedemo/src/main/webapp/js" by typing "cd [directory]"
+10.  In the command line, go into the directory "~/src/main/webapp/js" by typing "cd [directory]"
 
 11.  To start the Node.js server type "node server.js" (Port changable by editing server.js (Change it in line 14 after "listen")) (Default port 8080)
 
