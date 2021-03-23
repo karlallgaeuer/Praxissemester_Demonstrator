@@ -48,7 +48,7 @@ composed from bio.tools through an easy-to-use web interface.
 
 11.  To start the Node.js server type "node server.js" (Port changable by editing server.js (Change it in line 14 after "listen")) (Default port 8080)
 
-12. Open Chrome with disabled web security (Linux: Run "google-chrome --disable-web-security")(Windows: Go to the folder where Chrome.exe is and run this command: "chrome.exe --disable-web-security")
+12. Open Chrome with disabled web security (Linux: Run "google-chrome --disable-web-security")(Windows: Go to the folder where Chrome.exe is and run this command: "chrome.exe --user-data-dir="C:/Chrome dev session" --disable-web-security"). If you use Windows the "Chrome dev session"-Folder can be deleted afterwards (you can place it somewhere else too).
 
 13. Open "http://localhost:8080/" in your browser 
 
