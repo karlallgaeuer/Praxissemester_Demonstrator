@@ -150,7 +150,6 @@ public class ApeController {
 				map.put("label", currTempl.getDescription());
 				list.add(map);
 			}
-			
 			return list;
 		} else {
 			System.err.println("Ontology doesn't exist.");
