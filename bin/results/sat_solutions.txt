@@ -1,0 +1,1 @@
+FASTA(MemT0.0) ID list(MemT0.0) ID list(UsedT0.0) FASTA(UsedT0.0) [MemT0.0] <- (UsedT0.0) gprofiler(Tool1) GO-term enrichment data(MemT1.0) iHOP format(MemT1.0) FASTA(MemT1.1) ID list(MemT1.1) [MemT1.0] <- (UsedT1.0) iHOP format(UsedT1.0) 
