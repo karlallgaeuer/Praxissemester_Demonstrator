@@ -63,3 +63,7 @@ Vedran Kasalica, Anna-Lena Lamprecht.
 ## License
 This project is licensed under the Apache 2.0 license.
 
+## Demo Pictures
+
+![image](https://user-images.githubusercontent.com/55283315/112203233-99a59e00-8c12-11eb-9c61-208da101c8a6.png)
+![image](https://user-images.githubusercontent.com/55283315/112203249-9e6a5200-8c12-11eb-85fa-41b7bdccabf5.png)
