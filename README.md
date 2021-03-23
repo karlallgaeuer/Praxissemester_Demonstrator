@@ -40,7 +40,7 @@ composed from bio.tools through an easy-to-use web interface.
 
 8.  Fetch the dependencies with Maven (e.g. in Eclipse Maven -> Update Project)
 
-9. Add the APE-library. Location: "~/lib/APE-0.9.1.jar"
+9. Add the APE-library. Location: "~/lib/APE-0.9.1.jar" (e.g. in Eclipse: Right click project --> Properties --> Java Build Path --> Add external JARs)
 
 9.  Run Application.java (Starts the backend with Spring Boot (for the REST-API))
 
